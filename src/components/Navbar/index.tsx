@@ -43,7 +43,7 @@ export default class Navbar extends React.Component<NavbarProps, NavbarState> {
                 <span id='ordersBtn' className="activeLabel" onChange={() => this.props.setActive('orders')}>Orders</span>
               </label>
               {this.props.sessionToken &&
-              <Button variant='subtle' sx={{color: '#05386b', borderRadius: '15px'}} leftIcon={<BiLogOutCircle/>} onClick={this.props.clearToken}>Logout</Button>}
+              <Button variant='subtle' sx={{color: '#05386b', borderRadius: '15px', fontFamily: 'Montserrat, sans-serif', fontWeight: '400', fontSize: '1rem', width: 'fit-content'}} leftIcon={<BiLogOutCircle/>} onClick={this.props.clearToken}>Logout</Button>}
             </Group>
         </Container>}
             {this.props.active === 'users' ?

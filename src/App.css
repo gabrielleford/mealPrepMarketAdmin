@@ -194,7 +194,7 @@ body {
 .activeLabel {
   font-family: 'Montserrat', sans-serif;
   color: #05386b;
-  padding: 5px 7px;
+  padding: 7px 10px;
   border-radius: 15px;
   transition: all 0.2s ease-in-out;
 }

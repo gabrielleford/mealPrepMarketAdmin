@@ -1,7 +1,7 @@
 import React from "react";
 import APIURL from "../helpers/environment";
 import { AppProps } from '../../App';
-import { Navigate, Link } from 'react-router-dom';
+import { Navigate } from 'react-router-dom';
 import {GoMail} from 'react-icons/go'
 import { FiLock } from 'react-icons/fi';
 import { BsEmojiDizzy, BsEmojiFrown } from 'react-icons/bs';
@@ -55,7 +55,7 @@ export default class Login extends React.Component<LoginProps, LoginState> {
       submitted: true,
     });
 
-    await fetch(`http://localhost:3001/user/adminLogin`, {
+    await fetch(`${APIURL}/admin/adminLogin`, {
       method: "POST",
       body: JSON.stringify({
         user: {
@@ -79,7 +79,7 @@ export default class Login extends React.Component<LoginProps, LoginState> {
       if (this.state.responseCode === 201) {
         this.props.updateToken(json.sessionToken);
         this.props.setSessionToken(json.sessionToken)
-        this.setState({
+        this.state._isMounted && this.setState({
           user: json.user.id
         });
       }

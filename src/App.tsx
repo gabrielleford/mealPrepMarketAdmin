@@ -8,6 +8,7 @@ import Login from './components/Auth';
 import Users from './components/Users';
 import Listings from './components/Listings';
 import Orders from './components/Orders';
+import UserInfo from './components/Users/UserInfo';
 
 export type AppProps = {
   sessionToken: string | null,
@@ -39,11 +40,11 @@ export type AppProps = {
 function App() {
   const [sessionToken, setSessionToken] = useState<string | null>('');
   const [active, setActive] = useState<string>('');
-  const [what, setWhat] = useState<string>('');
-  const [dlt, setDelete] = useState<boolean>(false);
-  const [isOpen, setIsOpen] = useState<boolean>(false);
-  const [popoverOpen, setPopoverOpen] = useState<boolean>(false);
-  const [response, setResponse] = useState<number>(0);
+  // const [what, setWhat] = useState<string>('');
+  // const [dlt, setDelete] = useState<boolean>(false);
+  // const [isOpen, setIsOpen] = useState<boolean>(false);
+  // const [popoverOpen, setPopoverOpen] = useState<boolean>(false);
+  // const [response, setResponse] = useState<number>(0);
   const [user, setUser] = useState<{
     userId: string,
     firstName: string,
@@ -68,8 +69,8 @@ function App() {
   const clearToken = () => {
     localStorage.clear();
     setSessionToken('');
-    setWhat('');
-    setDelete(false);
+    // setWhat('');
+    // setDelete(false);
     setUser({
       userId: '',
       firstName: '', 
@@ -148,6 +149,10 @@ function App() {
                 sessionToken={sessionToken}
                 user={user}
                 setActive={setActive} 
+              />} 
+              />
+            <Route path='/user/:id' element={
+              <UserInfo
               />} 
             />
             <Route path='/listings' element={

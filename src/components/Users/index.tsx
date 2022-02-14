@@ -2,7 +2,8 @@ import React from "react";
 import APIURL from "../helpers/environment";
 import { Navigate } from 'react-router-dom';
 import { AppProps } from "../../App";
-import { Container } from '@mantine/core';
+import { Button, Container } from '@mantine/core';
+import UserMap from "./UserMap";
 
 type UserProps = {
   sessionToken: AppProps['sessionToken'],
@@ -10,9 +11,9 @@ type UserProps = {
   setActive: AppProps['setActive'],
 }
 
-type UserState = {
+export type UserState = {
   users: {
-    userId: string,
+    id: string,
     role: string,
     firstName: string,
     lastName: string,
@@ -28,7 +29,7 @@ export default class Users extends React.Component<UserProps, UserState> {
     super(props)
 
     this.state = {
-      users: [{ userId: '', role: '', firstName: '', lastName: '', email: '', profilePicture: '', profileDescription: ''}],
+      users: [{ id: '', role: '', firstName: '', lastName: '', email: '', profilePicture: '', profileDescription: ''}],
       _isMounted: false,
     }
   }
@@ -51,7 +52,7 @@ export default class Users extends React.Component<UserProps, UserState> {
       })
       .catch(error => console.log(error))
     } else {
-      await fetch(`http://localhost:3001/user/users`, {
+      await fetch(`${APIURL}/user/users`, {
         method: 'GET',
         headers: new Headers({
           'Content-Type': 'application/json',
@@ -59,11 +60,12 @@ export default class Users extends React.Component<UserProps, UserState> {
         })
       })
       .then(res => {
-        console.log(res)
         return res.json()
       })
       .then(res => {
-        console.log(res)
+        this.state._isMounted && this.setState({
+          users: [...res]
+        })
       })
       .catch(error => console.log(error))
     }
@@ -77,6 +79,10 @@ export default class Users extends React.Component<UserProps, UserState> {
     this.fetchUsers();
   }
 
+  // componentDidUpdate() {
+
+  // }
+
   componentWillUnmount() {
     this.setState({
       _isMounted: false
@@ -85,7 +91,8 @@ export default class Users extends React.Component<UserProps, UserState> {
 
   render(): React.ReactNode {
     return (
-      <Container>
+      <Container mt={'60px'}>
+        <UserMap users={this.state.users} />
         {!localStorage.getItem('Authorization') && <Navigate to='/' replace={true} />}
       </Container>
     )
