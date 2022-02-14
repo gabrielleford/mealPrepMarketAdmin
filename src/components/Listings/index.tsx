@@ -1,7 +1,24 @@
 import React from 'react';
 import { Container } from '@mantine/core';
+import { AppProps } from '../../App';
 
-export default class Listings extends React.Component {
+type ListingProps = {
+  setActive: AppProps['setActive'],
+}
+
+export default class Listings extends React.Component<ListingProps> {
+  constructor(props:ListingProps) {
+    super(props)
+
+    this.state = {
+      
+    }
+  }
+
+  componentDidMount() {
+    this.props.setActive('');
+  }
+
   render(): React.ReactNode {
     return (
       <Container>

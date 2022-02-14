@@ -1,5 +1,6 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import './App.css';
+import APIURL from './components/helpers/environment';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { Container, MantineProvider } from '@mantine/core';
 import Navbar from './components/Navbar';
@@ -8,7 +9,114 @@ import Users from './components/Users';
 import Listings from './components/Listings';
 import Orders from './components/Orders';
 
+export type AppProps = {
+  sessionToken: string | null,
+  active: string
+  user: {
+    userId: string,
+    firstName: string,
+    lastName: string,
+    email: string,
+    profilePicture: string,
+    profileDescription: string,
+    role: string
+  },
+  clearToken: () => void,
+  updateToken: (newToken: string) => void,
+  setSessionToken: (sessionToken: string | null) => void,
+  setActive: (active:string) => void,
+  setUser: (user: {
+    userId: string,
+    firstName: string,
+    lastName: string,
+    email: string,
+    profilePicture: string,
+    profileDescription: string,
+    role: string
+  }) => void,
+}
+
 function App() {
+  const [sessionToken, setSessionToken] = useState<string | null>('');
+  const [active, setActive] = useState<string>('');
+  const [what, setWhat] = useState<string>('');
+  const [dlt, setDelete] = useState<boolean>(false);
+  const [isOpen, setIsOpen] = useState<boolean>(false);
+  const [popoverOpen, setPopoverOpen] = useState<boolean>(false);
+  const [response, setResponse] = useState<number>(0);
+  const [user, setUser] = useState<{
+    userId: string,
+    firstName: string,
+    lastName: string,
+    email: string,
+    profilePicture: string,
+    profileDescription: string,
+    role: string}>({
+      userId: '',
+      firstName: '', 
+      lastName: '', 
+      email: '', 
+      profilePicture: '', 
+      profileDescription: '', 
+      role: ''});
+
+  const updateToken = (newToken:string) => {
+    localStorage.setItem('Authorization', newToken);
+    setSessionToken(newToken);
+  }
+  
+  const clearToken = () => {
+    localStorage.clear();
+    setSessionToken('');
+    setWhat('');
+    setDelete(false);
+    setUser({
+      userId: '',
+      firstName: '', 
+      lastName: '', 
+      email: '', 
+      profilePicture: '', 
+      profileDescription: '', 
+      role: ''});
+  }
+
+  useEffect(() => {
+    if (localStorage.getItem('Authorization'))
+    setSessionToken(localStorage.getItem('Authorization')); 
+
+      const fetchData = async ():Promise<void> => {
+        if (sessionToken !== '' && user.userId === '') {
+          await fetch(`${APIURL}/user/checkToken`, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              Authorization: `Bearer ${sessionToken}`
+            }
+          })
+          .then(res => {
+            return res.json()
+          })
+          .then(res => {
+            setUser(res)
+          })
+          .then(() => user)
+          .catch(error => console.log(error))
+        } else if (user.userId !== '' && sessionToken === '') {
+          setUser({
+            userId: '',
+            firstName: '', 
+            lastName: '', 
+            email: '', 
+            profilePicture: '', 
+            profileDescription: '', 
+            role: ''});
+        }
+      }
+
+      fetchData()
+
+  }, [user, sessionToken])
+
   return (
     <MantineProvider theme={{
       fontFamily: 'Open Sans, sans-serif',
@@ -21,13 +129,38 @@ function App() {
     }}>
       <Container>
         <Router>
-          <Navbar />
+          <Navbar 
+            sessionToken={sessionToken}
+            active={active}
+            clearToken={clearToken}
+            setActive={setActive}
+          />
 
           <Routes>
-            <Route path='/' element={<Login />} />
-            <Route path='/users' element={<Users />} />
-            <Route path='/listings' element={<Listings />} />
-            <Route path='/orders' element={<Orders />} />
+            <Route path='/' element={<Login
+                sessionToken={sessionToken}
+                updateToken={updateToken}
+                setSessionToken={setSessionToken}
+                setUser={setUser}
+              />} 
+            />
+            <Route path='/users' element={<Users 
+                sessionToken={sessionToken}
+                user={user}
+                setActive={setActive} 
+              />} 
+            />
+            <Route path='/listings' element={
+              <Listings 
+                
+                setActive={setActive} 
+              />} 
+            />
+            <Route path='/orders' element={
+              <Orders 
+                setActive={setActive} 
+              />} 
+            />
           </Routes>
         </Router>
       </Container>

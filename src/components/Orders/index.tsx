@@ -1,7 +1,24 @@
 import React from "react";
 import { Container } from '@mantine/core';
+import { AppProps } from "../../App";
 
-export default class Orders extends React.Component {
+type OrderProps = {
+  setActive: AppProps['setActive'],
+}
+
+export default class Orders extends React.Component<OrderProps> {
+  constructor(props:OrderProps) {
+    super(props)
+
+    this.state = {
+      
+    }
+  }
+
+  componentDidMount() {
+    this.props.setActive('');
+  }
+
   render(): React.ReactNode {
     return (
       <Container>
