@@ -6,7 +6,12 @@ import { Button, Container } from '@mantine/core';
 import ListingMap from './ListingMap';
 
 type ListingProps = {
+  dlt: AppProps['dlt'],
+  what: AppProps['what'],
+  response: AppProps['response'],
   setActive: AppProps['setActive'],
+  setDlt: AppProps['setDlt'],
+  setResponse: AppProps['setResponse'],
 }
 
 export type ListingState = {
@@ -83,6 +88,7 @@ export default class Listings extends React.Component<ListingProps, ListingState
         <Button className='adminButton' color='secondary' size='lg' radius='lg' sx={{color: '#edf5e1'}} compact onClick={this.createListing}>Create</Button>
         <ListingMap listings={this.state.listings} />
         {this.state.create && <Navigate to='/create' replace={true} />}
+                {!localStorage.getItem('Authorization') && <Navigate to='/' replace={true}/>}
       </Container>
     )
   }

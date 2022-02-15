@@ -1,7 +1,6 @@
 import React from "react";
 import APIURL from "../helpers/environment";
 import { AppProps } from '../../App';
-import { Navigate } from 'react-router-dom';
 import {GoMail} from 'react-icons/go'
 import { FiLock } from 'react-icons/fi';
 import { BsEmojiDizzy, BsEmojiFrown } from 'react-icons/bs';
@@ -82,7 +81,7 @@ export default class Login extends React.Component<LoginProps, LoginState> {
         this.state._isMounted && this.setState({
           user: json.user.id
         });
-        this.props.setActive('users');
+        this.state._isMounted && this.props.setActive('users');
       }
     })
     .catch(error => console.log(error))

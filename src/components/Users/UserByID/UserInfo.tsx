@@ -7,10 +7,14 @@ import { Card, Container } from '@mantine/core';
 
 export type UserProps = {
   sessionToken: AppProps['sessionToken'],
+  dlt: AppProps['dlt']
   what: AppProps['what'],
   active: AppProps['active'],
+  response: AppProps['response'],
   setWhat: AppProps['setWhat'],
   setActive: AppProps['setActive'],
+  setDlt: AppProps['setDlt'],
+  setResponse: AppProps['setResponse'],
 }
 
 export type UserState = {
@@ -139,6 +143,7 @@ export default class UserInfo extends React.Component<UserProps, UserState> {
         this.props.active === 'orders' ?
           <Navigate to='/orders' replace={true} /> : ''
         }
+        {!localStorage.getItem('Authorization') && <Navigate to='/' replace={true}/>}
       </>
     )
   }

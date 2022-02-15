@@ -1,12 +1,19 @@
 import React from "react";
-import { Container } from '@mantine/core';
-import { AppProps } from "../../App";
 import APIURL from "../helpers/environment";
+import { Navigate } from 'react-router-dom';
+import { AppProps } from "../../App";
 import OrderMap from "./OrderMap";
+import { Container } from '@mantine/core';
 
 type OrderProps = {
   sessionToken: AppProps['sessionToken'],
+  dlt: AppProps['dlt'],
+  what: AppProps['what'],
+  response: AppProps['response'],
   setActive: AppProps['setActive'],
+  setWhat: AppProps['setWhat'],
+  setDlt: AppProps['setDlt'],
+  setResponse: AppProps['setResponse'],
 }
 
 export type OrderState = {
@@ -73,11 +80,9 @@ export default class Orders extends React.Component<OrderProps, OrderState> {
       })
     })
     .then(res => {
-      console.log(res)
       return res.json()
     })
     .then(res => {
-      console.log(res)
       this.state._isMounted && this.setState({
         orders: [...res]
       })
@@ -108,6 +113,7 @@ export default class Orders extends React.Component<OrderProps, OrderState> {
     return (
       <Container mt={'60px'}>
         <OrderMap orders={this.state.orders} />
+        {!localStorage.getItem('Authorization') && <Navigate to='/' replace={true}/>}
       </Container>
     )
   }

@@ -7,9 +7,7 @@ import { Badge, Button, Card, Center, Grid, Group, Image, Input, NumberInput, Sp
 
 type EditProps = {
   sessionToken: ListingProps['sessionToken'],
-  fetchedListing: ListingState['fetchedListing'],
-  descriptionErr: ListingState['descriptionErr'],
-  priceErr: ListingState['priceErr'],
+  listingState: ListingState
   handleChange: ListingById['handleChange'],
   handleNumber: ListingById['handleNumber'],
   fetchListing: ListingById['fetchListing'],
@@ -68,13 +66,13 @@ export default class ListingEdit extends React.Component<EditProps, EditState> {
       if (!this.state.editTitle) {
         return (
           <>
-            <Title className="listingTitle" align="center" order={1} onClick={() => this.setEdit('title')}>{this.props.fetchedListing.title}</Title>
+            <Title className="listingTitle" align="center" order={1} onClick={() => this.setEdit('title')}>{this.props.listingState.fetchedListing.title}</Title>
           </>
         )
       } else {
         return (
             <Group position="center">
-              <Input name="title" radius='md' size='lg' value={this.props.fetchedListing.title} onChange={this.props.handleChange}/>
+              <Input name="title" radius='md' size='lg' value={this.props.listingState.fetchedListing.title} onChange={this.props.handleChange}/>
             </Group>
         )
       }
@@ -86,7 +84,7 @@ export default class ListingEdit extends React.Component<EditProps, EditState> {
             <label className='avatarLabel' htmlFor="image">
               {this.state.stringPrvwSrc ? 
                 <Image className="avatar" radius={15} src={this.state.stringPrvwSrc} width={550} height={400}  /> :
-                <Image className="avatar" radius={15} width={550} height={400} src={this.props.fetchedListing.image} />
+                <Image className="avatar" radius={15} width={550} height={400} src={this.props.listingState.fetchedListing.image} />
               }
             </label>
             <input id='image' name='image' type='file' value={this.state.file} className="avatarInput" onChange={this.handleImage} />
@@ -99,14 +97,14 @@ export default class ListingEdit extends React.Component<EditProps, EditState> {
       if (!this.state.editDescription) {
         return (
           <>
-            {this.props.fetchedListing.description.length > 255 ?
+            {this.props.listingState.fetchedListing.description.length > 255 ?
               <Spoiler maxHeight={70} showLabel='View more' hideLabel='View less'>
-                <Text mt={-40} style={{paddingTop: '70px'}} className="description" onClick={() => this.setEdit('description')}>{this.props.fetchedListing.description}
+                <Text mt={-40} style={{paddingTop: '70px'}} className="description" onClick={() => this.setEdit('description')}>{this.props.listingState.fetchedListing.description}
                 <br/>
                 {this.renderPrice()}
                 </Text>
               </Spoiler> :
-              <Text mt={-40} style={{paddingTop: '70px'}} className="description" onClick={() => this.setEdit('description')}>{this.props.fetchedListing.description}
+              <Text mt={-40} style={{paddingTop: '70px'}} className="description" onClick={() => this.setEdit('description')}>{this.props.listingState.fetchedListing.description}
               <br/>
               {this.renderPrice()}
               </Text>
@@ -117,8 +115,8 @@ export default class ListingEdit extends React.Component<EditProps, EditState> {
       } else {
         return(
           <Group mt='xl' direction="column" position="center">
-            <Textarea name='description' placeholder={this.props.fetchedListing.description} radius='md' invalid={this.props.descriptionErr ? true : false} required value={this.props.fetchedListing.description} onChange={this.props.handleChange} />
-            <NumberInput name='price' placeholder={this.props.fetchedListing.price.toString()} radius='md' invalid={this.props.priceErr ? true : false} required hideControls value={this.props.fetchedListing.price} onChange={this.props.handleNumber} />
+            <Textarea name='description' placeholder={this.props.listingState.fetchedListing.description} radius='md' invalid={this.props.listingState.descriptionErr ? true : false} required value={this.props.listingState.fetchedListing.description} onChange={this.props.handleChange} />
+            <NumberInput name='price' placeholder={this.props.listingState.fetchedListing.price.toString()} radius='md' invalid={this.props.listingState.priceErr ? true : false} required hideControls value={this.props.listingState.fetchedListing.price} onChange={this.props.handleNumber} />
           </Group>
         )
       }
@@ -128,7 +126,7 @@ export default class ListingEdit extends React.Component<EditProps, EditState> {
       if (!this.state.editPrice) {
         return (
           <Center>
-            <Badge mt={7} radius='lg' size="xl" onClick={() => this.setEdit('price')}>${this.props.fetchedListing.price} USD</Badge>
+            <Badge mt={7} radius='lg' size="xl" onClick={() => this.setEdit('price')}>${this.props.listingState.fetchedListing.price} USD</Badge>
         </Center>
         )
       }
@@ -249,11 +247,11 @@ updateListingImage = async (encodedImg: string):Promise<void> => {
       method: 'PUT',
       body: JSON.stringify({
         listing: {
-          title: this.props.fetchedListing.title,
-          description: this.props.fetchedListing.description,
-          image: this.props.fetchedListing.image,
-          price: this.props.fetchedListing.price,
-          tag: this.props.fetchedListing.tag,
+          title: this.props.listingState.fetchedListing.title,
+          description: this.props.listingState.fetchedListing.description,
+          image: this.props.listingState.fetchedListing.image,
+          price: this.props.listingState.fetchedListing.price,
+          tag: this.props.listingState.fetchedListing.tag,
         }
       }),
       headers: new Headers({
@@ -288,11 +286,11 @@ updateListingInfo = async ():Promise<void> => {
     method: 'PUT',
     body: JSON.stringify({
       listing: {
-        title: this.props.fetchedListing.title,
-        description: this.props.fetchedListing.description,
-        image: this.props.fetchedListing.image,
-        price: this.props.fetchedListing.price,
-        tag: this.props.fetchedListing.tag,
+        title: this.props.listingState.fetchedListing.title,
+        description: this.props.listingState.fetchedListing.description,
+        image: this.props.listingState.fetchedListing.image,
+        price: this.props.listingState.fetchedListing.price,
+        tag: this.props.listingState.fetchedListing.tag,
       }
     }),
     headers: new Headers({
@@ -350,7 +348,7 @@ updateListingInfo = async ():Promise<void> => {
       <Card radius='lg' className="listingCard">
         {this.renderTitle()}
         <Group spacing={5} position="center"> 
-          <Text size="lg" sx={{color: '#379683', fontFamily: 'Open-Sans, sans-serif'}} align="center" variant="link" component={Link} to={`/user/${this.props.fetchedListing.ownerID}`}>{this.props.fetchedListing.user.firstName} {this.props.fetchedListing.user.lastName}</Text>
+          <Text size="lg" sx={{color: '#379683', fontFamily: 'Open-Sans, sans-serif'}} align="center" variant="link" component={Link} to={`/user/${this.props.listingState.fetchedListing.ownerID}`}>{this.props.listingState.fetchedListing.user.firstName} {this.props.listingState.fetchedListing.user.lastName}</Text>
         </Group>
         <Center>
           <Card.Section>

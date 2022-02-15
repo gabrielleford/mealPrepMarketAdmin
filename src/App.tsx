@@ -16,6 +16,9 @@ export type AppProps = {
   sessionToken: string | null,
   active: string
   what: string
+  dlt: boolean
+  response: number,
+  endpointID: string,
   user: {
     userId: string,
     firstName: string,
@@ -30,6 +33,9 @@ export type AppProps = {
   setSessionToken: (sessionToken: string | null) => void,
   setActive: (active:string) => void,
   setWhat: (what: string) => void,
+  setDlt: (dlt: boolean) => void,
+  setResponse: (response: number) => void,
+  setEndpointID: (endpointID: string) => void,
   setUser: (user: {
     userId: string,
     firstName: string,
@@ -43,12 +49,11 @@ export type AppProps = {
 
 function App() {
   const [sessionToken, setSessionToken] = useState<string | null>('');
-  const [active, setActive] = useState<string>('');
+  const [active, setActive] = useState<string>(!localStorage.getItem('Authorization') ? '' : 'users');
   const [what, setWhat] = useState<string>('');
-  // const [dlt, setDelete] = useState<boolean>(false);
-  // const [isOpen, setIsOpen] = useState<boolean>(false);
-  // const [popoverOpen, setPopoverOpen] = useState<boolean>(false);
-  // const [response, setResponse] = useState<number>(0);
+  const [dlt, setDlt] = useState<boolean>(false);
+  const [endpointID, setEndPointID] = useState<string>('');
+  const [response, setResponse] = useState<number>(0);
   const [user, setUser] = useState<{
     userId: string,
     firstName: string,
@@ -73,8 +78,9 @@ function App() {
   const clearToken = () => {
     localStorage.clear();
     setSessionToken('');
-    // setWhat('');
-    // setDelete(false);
+    setWhat('');
+    setDlt(false);
+    setResponse(0);
     setUser({
       userId: '',
       firstName: '', 
@@ -143,38 +149,62 @@ function App() {
           />
 
           <Routes>
-            <Route path='/' element={<Login
-                sessionToken={sessionToken}
-                updateToken={updateToken}
-                setSessionToken={setSessionToken}
-                setActive={setActive}
-              />} 
-            />
+            {!localStorage.getItem('Authorization') && 
+              <Route path='/' element={<Login
+                  sessionToken={sessionToken}
+                  updateToken={updateToken}
+                  setSessionToken={setSessionToken}
+                  setActive={setActive}
+                />} 
+              />
+            }
             <Route path='/users' element={<Users 
                 sessionToken={sessionToken}
                 user={user}
-                setActive={setActive} 
+                dlt={dlt}
+                what={what}
+                endpointID={endpointID}
+                response={response}
+                setActive={setActive}
+                setDlt={setDlt}
+                setWhat={setWhat}
+                setEndpointID={setEndPointID}
+                setResponse={setResponse}
               />} 
               />
             <Route path='/user/:id' element={
               <UserInfo
                 sessionToken={sessionToken}
+                dlt={dlt}
                 what={what}
                 active={active}
+                response={response}
+                setResponse={setResponse}
                 setWhat={setWhat}
                 setActive={setActive}
+                setDlt={setDlt}
               />} 
             />
             <Route path='/listings' element={
               <Listings 
-                
-                setActive={setActive} 
+                dlt={dlt}
+                what={what}
+                response={response}
+                setResponse={setResponse}
+                setActive={setActive}
+                setDlt={setDlt}
               />} 
             />
             <Route path='/listing/:id' element={
               <ListingById
                 sessionToken={sessionToken}
+                dlt={dlt}
+                what={what}
+                response={response}
+                setResponse={setResponse}
+                setWhat={setWhat}
                 setActive={setActive}
+                setDlt={setDlt}
               />}
             />
             <Route path='/create' element={
@@ -186,7 +216,13 @@ function App() {
             <Route path='/orders' element={
               <Orders 
                 sessionToken={sessionToken}
-                setActive={setActive} 
+                dlt={dlt}
+                what={what}
+                response={response}
+                setResponse={setResponse}
+                setActive={setActive}
+                setWhat={setWhat}
+                setDlt={setDlt}
               />} 
             />
           </Routes>

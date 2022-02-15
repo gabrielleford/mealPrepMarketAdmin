@@ -74,8 +74,8 @@ export default class ListingMap extends React.Component<MapProps, MapState> {
         <thead>
           <tr>
             <th style={{textAlign: 'center', color: '#edf5e1'}}>ID</th>
-            <th style={{textAlign: 'center', color: '#edf5e1'}}>Image</th>
             <th style={{textAlign: 'center', color: '#edf5e1'}}>Title</th>
+            <th style={{textAlign: 'center', color: '#edf5e1'}}>Image</th>
             <th style={{textAlign: 'center', color: '#edf5e1'}}>Price</th>
             <th style={{textAlign: 'center', color: '#edf5e1', maxWidth: '100px'}}>Description</th>
             <th style={{textAlign: 'center', color: '#edf5e1'}}>Tags</th>

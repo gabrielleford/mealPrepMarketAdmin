@@ -8,7 +8,13 @@ import ListingEdit from "./ListingEdit";
 
 export type ListingProps = {
   sessionToken: AppProps['sessionToken'],
+  dlt: AppProps['dlt'],
+  what: AppProps['what'],
+  response: AppProps['response'],
   setActive: AppProps['setActive'],
+  setDlt: AppProps['setDlt'],
+  setWhat: AppProps['setWhat'],
+  setResponse: AppProps['setResponse'],
 }
 
 export type ListingState = {
@@ -135,23 +141,19 @@ class ListingById extends React.Component<ListingProps, ListingState> {
       _isMounted: true
     })
     this.fetchListing();
-    // this.props.setPrevPath(window.location.pathname);
   }
 
   componentWillUnmount() {
     this.setState({
       _isMounted: false
     })
-    // this.props.setDelete(false);
-    // this.setState({
-    //   ownerID: '',
-    // })
   }
 
   render(): React.ReactNode {
       return (
         <Container id='listingById' mt={-115} size={700}>
-            <ListingEdit sessionToken={this.props.sessionToken} fetchedListing={this.state.fetchedListing} descriptionErr={this.state.descriptionErr} priceErr={this.state.priceErr} handleChange={this.handleChange} handleNumber={this.handleNumber} fetchListing={this.fetchListing} />
+            <ListingEdit sessionToken={this.props.sessionToken} listingState={{...this.state}} handleChange={this.handleChange} handleNumber={this.handleNumber} fetchListing={this.fetchListing} />
+            {!localStorage.getItem('Authorization') && <Navigate to='/' replace={true}/>}
         </Container>
       )
   }

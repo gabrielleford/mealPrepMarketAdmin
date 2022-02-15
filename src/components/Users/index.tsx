@@ -5,10 +5,18 @@ import { AppProps } from "../../App";
 import { Container } from '@mantine/core';
 import UserMap from "./UserMap";
 
-type UserProps = {
+export type UserProps = {
   sessionToken: AppProps['sessionToken'],
   user: AppProps['user'],
+  dlt: AppProps['dlt'],
+  what: AppProps['what'],
+  endpointID: AppProps['endpointID'],
+  response: AppProps['response'],
   setActive: AppProps['setActive'],
+  setDlt: AppProps['setDlt'],
+  setWhat: AppProps['setWhat'],
+  setEndpointID: AppProps['setEndpointID'],
+  setResponse: AppProps['setResponse'],
 }
 
 export type UserState = {
@@ -94,7 +102,7 @@ export default class Users extends React.Component<UserProps, UserState> {
   render(): React.ReactNode {
     return (
       <Container mt={'60px'}>
-        <UserMap users={this.state.users} />
+        <UserMap users={this.state.users} app={{...this.props}} />
         {!localStorage.getItem('Authorization') && <Navigate to='/' replace={true} />}
       </Container>
     )
