@@ -2,18 +2,22 @@ import React, { ChangeEvent } from "react";
 import APIURL from "../../helpers/environment";
 import { Buffer } from "buffer";
 import { Link, Navigate } from "react-router-dom";
-import { Avatar, Button, Center, Grid, Group, Input, Select, Text, Title, Textarea } from "@mantine/core";
 import ListingById, { ListingProps, ListingState } from ".";
+import { Badge, Button, Card, Center, Grid, Group, Image, Input, NumberInput, Spoiler, Text, Title, Textarea } from "@mantine/core";
 
 type EditProps = {
   sessionToken: ListingProps['sessionToken'],
   fetchedListing: ListingState['fetchedListing'],
+  descriptionErr: ListingState['descriptionErr'],
+  priceErr: ListingState['priceErr'],
   handleChange: ListingById['handleChange'],
+  handleNumber: ListingById['handleNumber'],
+  fetchListing: ListingById['fetchListing'],
 }
 
 export type EditState = {
   file: string,
-  profileID: string,
+  listingID: string,
   previewSrc: string | ArrayBuffer | null,
   stringPrvwSrc: string,
   newProfilePic: boolean,
@@ -23,9 +27,6 @@ export type EditState = {
   editTitle: boolean,
   editTags: boolean,
   editPrice: boolean,
-  titleErr: boolean,
-  descriptionErr: boolean,
-  priceErr: boolean,
   _isMounted: boolean,
 }
 
@@ -35,7 +36,7 @@ export default class ListingEdit extends React.Component<EditProps, EditState> {
 
     this.state = {
       file: '',
-      profileID: window.location.pathname.slice(6, 42),
+      listingID: window.location.pathname.slice(9, 45),
       previewSrc: '',
       stringPrvwSrc: '',
       newProfilePic: false,
@@ -45,9 +46,6 @@ export default class ListingEdit extends React.Component<EditProps, EditState> {
       editTitle: false,
       editTags: false,
       editPrice: false,
-      titleErr: false,
-      descriptionErr: false,
-      priceErr: false,
       _isMounted: false,
     }
 
@@ -76,108 +74,69 @@ export default class ListingEdit extends React.Component<EditProps, EditState> {
       } else {
         return (
             <Group position="center">
-              <Input name="title" radius='md' value={this.props.fetchedListing.title} onChange={this.props.handleChange}/>
+              <Input name="title" radius='md' size='lg' value={this.props.fetchedListing.title} onChange={this.props.handleChange}/>
             </Group>
         )
       }
     }
   
-    renderPrice = () => {
-      if (!this.state.editPrice) {
+    renderImage = () => {
         return (
-          <Grid.Col>
-            <Center>
-              <Text sx={{cursor: 'pointer'}} onClick={() => this.setEdit('email')}>{this.props.fetchedListing.price}</Text>
-            </Center>
-          </Grid.Col>
+          <Group direction="column">
+            <label className='avatarLabel' htmlFor="image">
+              {this.state.stringPrvwSrc ? 
+                <Image className="avatar" radius={15} src={this.state.stringPrvwSrc} width={550} height={400}  /> :
+                <Image className="avatar" radius={15} width={550} height={400} src={this.props.fetchedListing.image} />
+              }
+            </label>
+            <input id='image' name='image' type='file' value={this.state.file} className="avatarInput" onChange={this.handleImage} />
+            {this.state.file !== '' && <Text size="xs">{this.state.file.replace('C:\\fakepath\\', '')}</Text>}
+          </Group>
         )
-      } else {
-        return (
-          <Grid.Col>
-            <Center>
-              <Input name='email' radius='md' value={this.props.fetchedListing.price} onChange={this.props.handleChange}/>
-            </Center>
-          </Grid.Col>
-        )
-      }
     }
-  
-    // renderImage = () => {
-    //   if (this.props.fetchedUser.profilePicture !== '') {
-    //     return (
-    //       <Group direction="column">
-    //         <label className='avatarLabel' htmlFor="image">
-    //           {this.state.stringPrvwSrc ? 
-    //             <Avatar className="avatar" src={this.state.stringPrvwSrc} size={80} radius={40} /> :
-    //             <Avatar className="avatar" size={80} radius={40} src={this.props.fetchedUser.profilePicture} />
-    //           }
-    //         </label>
-    //         <input id='image' name='image' type='file' value={this.state.file} className="avatarInput" onChange={this.handleImage} />
-    //         {this.state.file !== '' && <Text size="xs">{this.state.file.replace('C:\\fakepath\\', '')}</Text>}
-    //       </Group>
-    //     )
-    //   } else {
-    //     return(
-    //       <Group direction="column" position="center">
-    //         <label className="avatarLabel" htmlFor="image">
-    //           {this.state.stringPrvwSrc ?
-    //           <Avatar className="avatar" src={this.state.stringPrvwSrc} size={80} radius={40} /> :
-    //           <Avatar className="avatar" color='primary' size={80} radius={40} />}
-    //         </label>
-    //         <input id='image' name='image' type='file' value={this.state.file} className="avatarInput" onChange={this.handleImage} />
-    //         {this.state.file !== '' && <Text size="xs">{this.state.file.replace('C:\\fakepath\\', '')}</Text>}
-    //       </Group>
-    //     )
-    //   }
-    // }
   
     renderDescription = () => {
       if (!this.state.editDescription) {
         return (
-          <Text mt={-7} className="description">{this.props.fetchedListing.description}
-          <br/>
-
-          </Text>
+          <>
+            {this.props.fetchedListing.description.length > 255 ?
+              <Spoiler maxHeight={70} showLabel='View more' hideLabel='View less'>
+                <Text mt={-40} style={{paddingTop: '70px'}} className="description" onClick={() => this.setEdit('description')}>{this.props.fetchedListing.description}
+                <br/>
+                {this.renderPrice()}
+                </Text>
+              </Spoiler> :
+              <Text mt={-40} style={{paddingTop: '70px'}} className="description" onClick={() => this.setEdit('description')}>{this.props.fetchedListing.description}
+              <br/>
+              {this.renderPrice()}
+              </Text>
+            }
+          </>
         )
         
       } else {
         return(
-          <Textarea name='description' placeholder={this.props.fetchedListing.description} radius='md' invalid={this.state.descriptionErr ? true : false} required value={this.props.fetchedListing.description} onChange={this.props.handleChange} />
+          <Group mt='xl' direction="column" position="center">
+            <Textarea name='description' placeholder={this.props.fetchedListing.description} radius='md' invalid={this.props.descriptionErr ? true : false} required value={this.props.fetchedListing.description} onChange={this.props.handleChange} />
+            <NumberInput name='price' placeholder={this.props.fetchedListing.price.toString()} radius='md' invalid={this.props.priceErr ? true : false} required hideControls value={this.props.fetchedListing.price} onChange={this.props.handleNumber} />
+          </Group>
         )
       }
     }
 
-    // renderTags = () => {
-    //   if (!this.state.editRole) {
-    //     return (
-    //       <Grid.Col>
-    //         <Center>
-    //           {(this.props.fetchedUser.role === 'admin' || this.props.fetchedUser.role === 'main admin') ?
-    //             <Text mt='1rem' onClick={() => this.setEdit('role')}>User Role: Admin</Text> :
-    //           this.props.fetchedUser.role === 'primary' ?
-    //             <Text mt='1rem' onClick={() => this.setEdit('role')}>User Role: Meal Prepper</Text> :
-    //           this.props.fetchedUser.role === 'primary' ? '' :
-    //             <Text mt='1rem' onClick={() => this.setEdit('role')}>User Role: Consumer</Text>
-    //           }
-    //         </Center>
-    //       </Grid.Col>
-    //     )
-    //   } else {
-    //     return (
-    //       <Grid.Col>
-    //         <Group position="center" spacing='xs' direction="column">
-    //           <Text mt='1rem'>User Role</Text>
-    //             <Select style={{width: '30%', margin: '0 auto'}} value={this.state.role} radius='md'
-    //             data={[
-    //               {value: 'admin', label:'Admin'},
-    //               {value: 'primary', label:'Meal Prepper'},
-    //               {value: 'secondary', label:'Consumer'},
-    //               ]} onChange={this.changeTags} />
-    //         </Group>
-    //       </Grid.Col>
-    //     )
-    //   }
-    // }
+    renderPrice = () => {
+      if (!this.state.editPrice) {
+        return (
+          <Center>
+            <Badge mt={7} radius='lg' size="xl" onClick={() => this.setEdit('price')}>${this.props.fetchedListing.price} USD</Badge>
+        </Center>
+        )
+      }
+    }
+
+    renderTags = () => {
+
+    }
   
     setEdit = (name: string) => {
       switch(name) {
@@ -267,11 +226,11 @@ export default class ListingEdit extends React.Component<EditProps, EditState> {
 }
 
 handleUpdate = () => {
-  // if ((this.props.fetchedUser.role === 'primary' || this.props.fetchedUser.role === 'admin' || this.props.fetchedUser.role === 'main admin') && this.state.newProfilePic && this.state.stringPrvwSrc !== '') {
-  //   this.updateListingImage(this.state.stringPrvwSrc)
-  // } else {
-  //   this.updateUserInfo();
-  // }
+  if (this.state.newProfilePic && this.state.stringPrvwSrc !== '') {
+    this.updateListingImage(this.state.stringPrvwSrc)
+  } else {
+    this.updateListingInfo();
+  }
 }
 
 updateListingImage = async (encodedImg: string):Promise<void> => {
@@ -286,21 +245,20 @@ updateListingImage = async (encodedImg: string):Promise<void> => {
     const cloudinary = await res.json();
     console.log(cloudinary);
 
-    await fetch(`${APIURL}/user/${this.state.profileID}`, {
+    await fetch(`${APIURL}/user/${this.state.listingID}`, {
       method: 'PUT',
       body: JSON.stringify({
-        // user: {
-        //   role: this.props.fetchedUser.role,
-        //   firstName: this.props.fetchedUser.firstName,
-        //   lastName: this.props.fetchedUser.lastName,
-        //   email: this.props.fetchedUser.email,
-        //   profilePicture: cloudinary.url,
-        //   profileDescription: this.props.fetchedUser.profileDescription,
-        // }
+        listing: {
+          title: this.props.fetchedListing.title,
+          description: this.props.fetchedListing.description,
+          image: this.props.fetchedListing.image,
+          price: this.props.fetchedListing.price,
+          tag: this.props.fetchedListing.tag,
+        }
       }),
       headers: new Headers({
         'Content-Type': 'application/json',
-        // authorization: `Bearer ${this.props.sessionToken}`
+        authorization: `Bearer ${this.props.sessionToken}`
       })
     })
     .then(res => {
@@ -320,26 +278,26 @@ updateListingImage = async (encodedImg: string):Promise<void> => {
         inputVisible: false,
         responseCode: 0,
       })
+      this.props.fetchListing()
     })
     .catch(error => console.log(error))
 }
 
-updateUserInfo = async ():Promise<void> => {
-  await fetch(`${APIURL}/user/${this.state.profileID}`, {
+updateListingInfo = async ():Promise<void> => {
+  await fetch(`${APIURL}/listing/${this.state.listingID}`, {
     method: 'PUT',
     body: JSON.stringify({
-      // user: {
-      //   role: this.props.fetchedUser.role,
-      //   firstName: this.props.fetchedUser.firstName,
-      //   lastName: this.props.fetchedUser.lastName,
-      //   email: this.props.fetchedUser.email,
-      //   profilePicture: this.props.fetchedUser.profilePicture,
-      //   profileDescription: this.props.fetchedUser.profileDescription,
-      // }
+      listing: {
+        title: this.props.fetchedListing.title,
+        description: this.props.fetchedListing.description,
+        image: this.props.fetchedListing.image,
+        price: this.props.fetchedListing.price,
+        tag: this.props.fetchedListing.tag,
+      }
     }),
     headers: new Headers({
       'Content-Type': 'application/json',
-      // authorization: `Bearer ${this.props.sessionToken}`
+      authorization: `Bearer ${this.props.sessionToken}`
     })
   })
   .then(res => {
@@ -349,6 +307,7 @@ updateUserInfo = async ():Promise<void> => {
     return res.json()
   })
   .then(res => {
+    console.log(res)
     this.state._isMounted &&  this.setState({
       file: '',
       previewSrc: '',
@@ -360,6 +319,7 @@ updateUserInfo = async ():Promise<void> => {
       inputVisible: false,
       responseCode: 0,
     })
+    this.props.fetchListing()
   })
   .catch(error => console.log(error))
 }
@@ -387,34 +347,34 @@ updateUserInfo = async ():Promise<void> => {
 
   renderComponent = () => {
     return (
-      <>
+      <Card radius='lg' className="listingCard">
         {this.renderTitle()}
         <Group spacing={5} position="center"> 
           <Text size="lg" sx={{color: '#379683', fontFamily: 'Open-Sans, sans-serif'}} align="center" variant="link" component={Link} to={`/user/${this.props.fetchedListing.ownerID}`}>{this.props.fetchedListing.user.firstName} {this.props.fetchedListing.user.lastName}</Text>
         </Group>
         <Center>
-
+          <Card.Section>
+            {this.renderImage()}
+          </Card.Section>
         </Center>
-      {/* <Grid sx={{color: '#edf5e1', margin: 'auto'}}>
-        <Grid.Col>
-        </Grid.Col>
-        <Grid.Col>
-          <Group mt='lg' position="center">
-            <Button className="formButton" size="lg" radius='md' compact onClick={() => console.log('delete')}>Delete</Button>
-            <Button component={Link} to={`/orders/${this.props.fetchedUser.id}`} className="formButton" size="lg" radius='md' compact>My Orders</Button>
+        <Center>
+          {this.renderDescription()}
+        </Center>
+        {this.state.inputVisible &&
+          <Group mt='sm' position="center">
+            <Button onClick={this.handleUpdate} className="formButton" size="sm" radius='md' compact >Save Changes</Button>
+            <Button onClick={this.cancelEdit} className='formButton' size="sm" radius='md' compact>Cancel</Button>
           </Group>
-        </Grid.Col>
-        <Grid.Col>
-          <Center>
-
-          </Center>
-        </Grid.Col> */}
+        }
+        <Group mt='lg' position="center">
+          <Button className="formButton" size="lg" radius='md' compact onClick={() => console.log('delete')}>Delete</Button>
+          {/* <Button component={Link} to={`/orders/${this.props.fetchedUser.id}`} className="formButton" size="lg" radius='md' compact>My Orders</Button> */}
+        </Group>
         {/* {this.props.dlt && 
           <ConfirmDelete what={this.props.what} dlt={this.props.dlt} sessionToken={this.props.sessionToken} listingID={this.props.listingID} user={this.props.user} setDelete={this.props.setDelete} clearToken={this.props.clearToken} response={this.props.response} setResponse={this.props.setResponse} />
         } */}
         {!localStorage.getItem('Authorization') && <Navigate to='/' replace={true} />}
-    {/* </Grid> */}
-      </>
+      </Card>
     )
   }
 

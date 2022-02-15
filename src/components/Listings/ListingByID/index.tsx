@@ -24,9 +24,10 @@ export type ListingState = {
       firstName: string,
       lastName: string,
     },
-  }
-  quantity: string | null,
-  fulfillmentMethod: string,
+  },
+  titleErr: boolean,
+  descriptionErr: boolean,
+  priceErr: boolean,
   responseCode: number,
   _isMounted: boolean,
 }
@@ -49,8 +50,9 @@ class ListingById extends React.Component<ListingProps, ListingState> {
           lastName: '',
         },
       },
-      quantity: '',
-      fulfillmentMethod: 'pickup',
+      titleErr: false,
+      descriptionErr: false,
+      priceErr: false,
       responseCode: 0,
       _isMounted: false,
     }
@@ -83,7 +85,49 @@ class ListingById extends React.Component<ListingProps, ListingState> {
         [e.target.name]: e.target.value,
       }
     }))
+
+    const {name, value} = e.target;
+    this.checkValue(name, value);
   }
+
+  checkValue = (name: string, value: string) => {
+    switch (name) {
+      case 'title': 
+          value.length < 3 ? this.setState({
+            titleErr: true
+          }) : this.setState({
+            titleErr: false
+          })
+        break;
+      case 'description':
+          value.length < 20 ? this.setState({
+            descriptionErr: true
+          }) : value.length > 2000 ? this.setState({
+            descriptionErr: true
+          }) : this.setState({
+            descriptionErr: false
+          })
+        break;
+      case 'price':
+          +value < 1 ? this.setState({
+            priceErr: true
+          }) : +value > 999.99 ? this.setState({
+            priceErr: true
+          }) : this.setState({
+            priceErr: false
+          })
+        break;
+      }
+    }
+
+    handleNumber = (value: number) => {
+      this.setState(prevState => ({
+        fetchedListing: {
+          ...prevState.fetchedListing,
+          price: value
+        }
+      }))
+    }
 
   componentDidMount() {
     this.props.setActive('empty');
@@ -107,36 +151,7 @@ class ListingById extends React.Component<ListingProps, ListingState> {
   render(): React.ReactNode {
       return (
         <Container id='listingById' mt={-115} size={700}>
-          {/* {this.props.dlt && 
-            <ConfirmDelete what={this.props.what} dlt={this.props.dlt} listingID={this.state.listingID} sessionToken={this.props.sessionToken} user={this.props.user} setDelete={this.props.setDelete} clearToken={this.props.clearToken} response={this.props.response} setResponse={this.props.setResponse} />
-          } */}
-          <Card radius='lg' padding='sm' className="listingCard">
-            <ListingEdit sessionToken={this.props.sessionToken} fetchedListing={this.state.fetchedListing} handleChange={this.handleChange} />
-              {/* <Center>
-                <Card.Section>
-                  <Image className="listingImg" radius={10} src={this.state.image} width={550} height={400} />
-                </Card.Section>
-              </Center>
-              <Center>
-              <Text mt={-7} className="description">{this.state.description}
-              <br/>
-                <Center>
-                  <Badge mt={7} radius='lg' size="xl">${this.state.price} USD</Badge>
-                </Center>
-              </Text>
-              </Center>
-              <Group mt='md' position="center" spacing='xl'>
-                <Button className="darkButton" radius='md' size='xl' compact onClick={this.editListing}>Edit</Button>
-                <Button className="darkButton" radius='md' size='xl' compact>Delete</Button>
-              </Group> */}
-          </Card>
-          {/* {this.props.response === 200 && this.state._isMounted ?
-            <Navigate to='/' replace={true} /> :
-            this.props.listingEdit ?
-            <Navigate to={`/listing/edit/${this.state.listingID}`} replace={true} /> :
-            this.state.responseCode === 201 ?
-            <Navigate to={`/orders/${this.props.user.userId}`} replace={true} /> : ''
-          } */}
+            <ListingEdit sessionToken={this.props.sessionToken} fetchedListing={this.state.fetchedListing} descriptionErr={this.state.descriptionErr} priceErr={this.state.priceErr} handleChange={this.handleChange} handleNumber={this.handleNumber} fetchListing={this.fetchListing} />
         </Container>
       )
   }

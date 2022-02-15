@@ -10,6 +10,7 @@ type EditProps = {
   fetchedUser: UserState['fetchedUser'],
   handleChange: UserInfo['handleChange'],
   changeRoleInfo: UserInfo['changeRoleInfo'],
+  fetchUser: UserInfo['fetchUser'],
 }
 
 export type EditState = {
@@ -331,6 +332,7 @@ updateUserProfilePic = async (encodedImg: string):Promise<void> => {
         inputVisible: false,
         responseCode: 0,
       })
+      this.props.fetchUser()
     })
     .catch(error => console.log(error))
 }
@@ -371,6 +373,7 @@ updateUserInfo = async ():Promise<void> => {
       responseCode: 0,
     })
   })
+  this.props.fetchUser()
   .catch(error => console.log(error))
 }
 

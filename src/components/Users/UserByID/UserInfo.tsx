@@ -89,7 +89,7 @@ export default class UserInfo extends React.Component<UserProps, UserState> {
     return (
     <Container id='userInfo'>
       <Card id='userCard' radius='lg' sx={{padding: '60px 0', width: '90%', margin: 'auto'}}>
-        <UserEdit fetchedUser={this.state.fetchedUser} handleChange={this.handleChange} changeRoleInfo={this.changeRoleInfo} sessionToken={this.props.sessionToken} />
+        <UserEdit fetchedUser={this.state.fetchedUser} handleChange={this.handleChange} changeRoleInfo={this.changeRoleInfo} sessionToken={this.props.sessionToken} fetchUser={this.fetchUser} />
       </Card>
       {
         !localStorage.getItem('Authorization') &&
