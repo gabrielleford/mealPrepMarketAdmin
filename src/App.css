@@ -74,10 +74,10 @@ body {
 }
 
 /* * FORMS * */
-  .formContainer {
+  /* .formContainer {
     margin-bottom: 40%;
     max-height: 50vh;
-  }
+  } */
 
 .form {
   font-family: 'Open Sans', sans-serif;
@@ -100,10 +100,15 @@ body {
   display: none;
 }
 
-/* * Listing By ID * */
-#listingById {
-  margin-bottom: 8rem;
+.checkbox {
+  color:#edf5e1;
+  font-size: 0.85rem;
 }
+
+/* * Listing By ID * */
+/* #listingById {
+  margin-bottom: 8rem;
+} */
 
 .listingCard {
   background: #edf5e1;
@@ -178,6 +183,20 @@ body {
   color: #05386b;
 }
 
+.adminButton {
+  font-family: 'Montserrat', sans-serif;
+  background: #05386b;
+  color: #8ee4af;
+  transition: all 0.2s ease-in-out;
+  font-weight: 400;
+}
+
+.adminButton:hover {
+  background: #c9f4da;
+  border: 1px solid #05386b;
+  color: #05386b;
+}
+
 .activeContainer {
   display: block;
   position: relative;
@@ -206,7 +225,7 @@ body {
 
 .activeContainer .activeInput:checked ~ .activeLabel {
   background: #05386b;
-  color: #5cdb95;
+  color: #8ee4af;
 }
 
 .activeLabel::after {

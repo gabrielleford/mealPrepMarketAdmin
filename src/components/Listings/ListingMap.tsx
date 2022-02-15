@@ -1,4 +1,5 @@
 import React from "react";
+import { Navigate } from 'react-router-dom';
 import { ListingState } from ".";
 import { Avatar, Center, Table } from '@mantine/core';
 
@@ -78,6 +79,7 @@ export default class ListingMap extends React.Component<MapProps, MapState> {
           </tr>
         </thead>
         <tbody>{this.listingMap()}</tbody>
+        {this.state.route !== '' && <Navigate to={`/listing/${this.state.route}`} replace={true} />}
       </Table>
     )
   }

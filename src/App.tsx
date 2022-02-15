@@ -9,6 +9,8 @@ import Users from './components/Users';
 import Listings from './components/Listings';
 import Orders from './components/Orders';
 import UserInfo from './components/Users/UserByID/UserInfo';
+import ListingById from './components/Listings/ListingByID';
+import CreateListing from './components/Listings/Create';
 
 export type AppProps = {
   sessionToken: string | null,
@@ -125,8 +127,9 @@ function App() {
       fontFamily: 'Open Sans, sans-serif',
       headings: {fontFamily: 'Montserrat'},
       colors: {
-        primary: ['#c0f1d6', '#abedc9', '#96e8bb',  '#82e3ae', '#5cdb95', '#43d685', '#2ed177', '#29bc6b', '#209254', '#1c7d48'   ],
-        secondary: ['#cee6fd', '#b6d9fc', '#9eccfa', '#6db3f8', '#05386b', '#0b80f4', '#0966c3', '#074d92', '#3c99f6', '#053361']
+        primary: ['#c0f1d6', '#abedc9', '#96e8bb',  '#82e3ae', '#2ed177', '#43d685', '#5cdb95', '#29bc6b', '#209254', '#1c7d48'   ],
+        secondary: ['#cee6fd', '#b6d9fc', '#9eccfa', '#6db3f8', '#0b80f4', '#0966c3', '#05386b', '#074d92', '#3c99f6', '#053361'],
+        ternary: ['#edf5e1']
       },
       primaryColor: 'primary',
     }}>
@@ -167,6 +170,18 @@ function App() {
                 
                 setActive={setActive} 
               />} 
+            />
+            <Route path='/listing/:id' element={
+              <ListingById
+                sessionToken={sessionToken}
+                setActive={setActive}
+              />}
+            />
+            <Route path='/create' element={
+              <CreateListing
+                sessionToken={sessionToken}
+                setActive={setActive}
+              />}
             />
             <Route path='/orders' element={
               <Orders 

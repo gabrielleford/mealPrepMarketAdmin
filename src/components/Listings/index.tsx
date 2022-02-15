@@ -1,7 +1,8 @@
 import React from 'react';
-import { Container } from '@mantine/core';
-import { AppProps } from '../../App';
 import APIURL from '../helpers/environment';
+import { Navigate } from 'react-router-dom';
+import { AppProps } from '../../App';
+import { Button, Container } from '@mantine/core';
 import ListingMap from './ListingMap';
 
 type ListingProps = {
@@ -17,6 +18,7 @@ export type ListingState = {
     price: number,
     tag: string[]
   }[],
+  create: boolean,
   _isMounted: boolean,
 }
 
@@ -33,8 +35,15 @@ export default class Listings extends React.Component<ListingProps, ListingState
         price: 0,
         tag: []
       }],
+      create: false,
       _isMounted: false
     }
+  }
+
+  createListing = () => {
+    this.setState({
+      create: true
+    })
   }
 
   fetchListings = async ():Promise<void> => {
@@ -45,11 +54,9 @@ export default class Listings extends React.Component<ListingProps, ListingState
       })
     })
     .then(res => {
-      console.log(res)
       return res.json()
     })
     .then(res => {
-      console.log(res)
       this.state._isMounted && this.setState({
         listings: [...res]
       })
@@ -73,7 +80,9 @@ export default class Listings extends React.Component<ListingProps, ListingState
   render(): React.ReactNode {
     return (
       <Container mt={'60px'}>
+        <Button className='adminButton' color='secondary' size='lg' radius='lg' sx={{color: '#edf5e1'}} compact onClick={this.createListing}>Create</Button>
         <ListingMap listings={this.state.listings} />
+        {this.state.create && <Navigate to='/create' replace={true} />}
       </Container>
     )
   }
