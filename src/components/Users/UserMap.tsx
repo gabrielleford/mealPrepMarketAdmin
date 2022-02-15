@@ -33,18 +33,24 @@ export default class UserMap extends React.Component<MapProps, MapState> {
       this.props.users.map((user, index) => {
         return (
             <tr key={index} style={{cursor: 'pointer'}} onClick={() => this.toggleUser(user.id)}>
-              <td style={{textAlign: 'center'}}>{index + 1}</td>
-              <td style={{textAlign: 'center'}}>{user.role}</td>
-              <td style={{textAlign: 'center'}}>{user.firstName}</td>
-              <td style={{textAlign: 'center'}}>{user.lastName}</td>
-              <td style={{textAlign: 'center'}}>{user.email}</td>
               <td>
                 <Center>
-                  <Avatar radius='xl' src={user.profilePicture} />
+                  <Avatar radius='xl' size='lg' src={user.profilePicture} />
                 </Center>
-              </td>
-              <td style={{textAlign: 'center'}}>{user.profileDescription}</td>
-            </tr>
+                </td>
+                <td style={{textAlign: 'center'}}>{index + 1}</td>
+                {(user.role === 'main admin' || user.role === 'admin') ?
+                  <td style={{textAlign: 'center'}}>Admin</td> :
+                  user.role === 'primary' ?
+                  <td style={{textAlign: 'center'}}>Meal Prepper</td> :
+                  user.role === 'secondary' ?
+                  <td style={{textAlign: 'center'}}>Consumer</td> : <td></td>
+                }
+                <td style={{textAlign: 'center'}}>{user.firstName}</td>
+                <td style={{textAlign: 'center'}}>{user.lastName}</td>
+                <td style={{textAlign: 'center'}}>{user.email}</td>
+                <td style={{textAlign: 'center'}}>{user.profileDescription}</td>
+              </tr>
         )
       })
     )
@@ -68,12 +74,12 @@ export default class UserMap extends React.Component<MapProps, MapState> {
       <Table mt='xl' sx={{background: '#05386b', color: '#edf5e1', borderRadius: '15px'}}>
         <thead>
           <tr>
+            <th style={{textAlign: 'center', color: '#edf5e1'}}>Profile Picture</th>
             <th style={{textAlign: 'center', color: '#edf5e1'}}>ID</th>
             <th style={{textAlign: 'center', color: '#edf5e1'}}>Role</th>
             <th style={{textAlign: 'center', color: '#edf5e1'}}>First Name</th>
             <th style={{textAlign: 'center', color: '#edf5e1'}}>Last Name</th>
             <th style={{textAlign: 'center', color: '#edf5e1'}}>Email</th>
-            <th style={{textAlign: 'center', color: '#edf5e1'}}>Profile Picture</th>
             <th style={{textAlign: 'center', color: '#edf5e1'}}>Profile Description</th>
           </tr>
         </thead>

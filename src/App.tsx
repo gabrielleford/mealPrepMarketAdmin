@@ -8,7 +8,7 @@ import Login from './components/Auth';
 import Users from './components/Users';
 import Listings from './components/Listings';
 import Orders from './components/Orders';
-import UserInfo from './components/Users/UserInfo';
+import UserInfo from './components/Users/UserByID/UserInfo';
 
 export type AppProps = {
   sessionToken: string | null,

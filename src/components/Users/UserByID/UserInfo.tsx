@@ -1,8 +1,8 @@
 import React from "react";
-import APIURL from "../helpers/environment";
+import APIURL from "../../helpers/environment";
 import { Navigate } from 'react-router-dom';
-import { AppProps } from "../../App";
-import UserEdit from './UserEdit';
+import { AppProps } from "../../../App";
+import UserEdit from "./UserEdit";
 import { Card, Container } from '@mantine/core';
 
 export type UserProps = {

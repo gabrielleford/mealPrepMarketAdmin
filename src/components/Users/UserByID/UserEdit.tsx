@@ -1,5 +1,5 @@
 import React, { ChangeEvent } from "react";
-import APIURL from "../helpers/environment";
+import APIURL from "../../helpers/environment";
 import { Buffer } from "buffer";
 import { Navigate } from "react-router-dom";
 import { Avatar, Button, Center, Grid, Group, Input, Select, Text, Textarea } from "@mantine/core";
@@ -165,11 +165,11 @@ export default class UserEdit extends React.Component<EditProps, EditState> {
         return (
           <Grid.Col>
             <Center>
-              {this.state.role === 'admin' ?
+              {(this.props.fetchedUser.role === 'admin' || this.props.fetchedUser.role === 'main admin') ?
                 <Text mt='1rem' onClick={() => this.setEdit('role')}>User Role: Admin</Text> :
-              this.state.role === 'primary' ?
+              this.props.fetchedUser.role === 'primary' ?
                 <Text mt='1rem' onClick={() => this.setEdit('role')}>User Role: Meal Prepper</Text> :
-              this.state.role === 'main admin' ? '' :
+              this.props.fetchedUser.role === 'primary' ? '' :
                 <Text mt='1rem' onClick={() => this.setEdit('role')}>User Role: Consumer</Text>
               }
             </Center>
@@ -180,7 +180,7 @@ export default class UserEdit extends React.Component<EditProps, EditState> {
           <Grid.Col>
             <Group position="center" spacing='xs' direction="column">
               <Text mt='1rem'>User Role</Text>
-                <Select style={{width: '50%', margin: '0 auto'}} value={this.state.role} radius='md'
+                <Select style={{width: '30%', margin: '0 auto'}} value={this.state.role} radius='md'
                 data={[
                   {value: 'admin', label:'Admin'},
                   {value: 'primary', label:'Meal Prepper'},
