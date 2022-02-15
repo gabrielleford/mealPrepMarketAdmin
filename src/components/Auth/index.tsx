@@ -11,7 +11,7 @@ export type LoginProps = {
   sessionToken: AppProps['sessionToken'],
   updateToken: AppProps['updateToken'],
   setSessionToken: AppProps['setSessionToken'],
-  setUser: AppProps['setUser']
+  setActive: AppProps['setActive'],
 }
 
 type LoginState = {
@@ -82,6 +82,7 @@ export default class Login extends React.Component<LoginProps, LoginState> {
         this.state._isMounted && this.setState({
           user: json.user.id
         });
+        this.props.setActive('users');
       }
     })
     .catch(error => console.log(error))
@@ -136,7 +137,7 @@ export default class Login extends React.Component<LoginProps, LoginState> {
             </Grid.Col>
           </Grid>
         </Paper>
-        {this.state.user !== '' && <Navigate to='/users' replace={true}/>}
+        
       </Container>
     )
   }

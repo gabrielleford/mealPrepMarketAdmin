@@ -16,7 +16,7 @@ export default class Listings extends React.Component<ListingProps> {
   }
 
   componentDidMount() {
-    this.props.setActive('');
+    this.props.setActive('2');
   }
 
   render(): React.ReactNode {

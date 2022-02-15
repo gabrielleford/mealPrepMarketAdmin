@@ -13,6 +13,7 @@ import UserInfo from './components/Users/UserInfo';
 export type AppProps = {
   sessionToken: string | null,
   active: string
+  what: string
   user: {
     userId: string,
     firstName: string,
@@ -26,6 +27,7 @@ export type AppProps = {
   updateToken: (newToken: string) => void,
   setSessionToken: (sessionToken: string | null) => void,
   setActive: (active:string) => void,
+  setWhat: (what: string) => void,
   setUser: (user: {
     userId: string,
     firstName: string,
@@ -40,7 +42,7 @@ export type AppProps = {
 function App() {
   const [sessionToken, setSessionToken] = useState<string | null>('');
   const [active, setActive] = useState<string>('');
-  // const [what, setWhat] = useState<string>('');
+  const [what, setWhat] = useState<string>('');
   // const [dlt, setDelete] = useState<boolean>(false);
   // const [isOpen, setIsOpen] = useState<boolean>(false);
   // const [popoverOpen, setPopoverOpen] = useState<boolean>(false);
@@ -142,7 +144,7 @@ function App() {
                 sessionToken={sessionToken}
                 updateToken={updateToken}
                 setSessionToken={setSessionToken}
-                setUser={setUser}
+                setActive={setActive}
               />} 
             />
             <Route path='/users' element={<Users 
@@ -153,6 +155,11 @@ function App() {
               />
             <Route path='/user/:id' element={
               <UserInfo
+                sessionToken={sessionToken}
+                what={what}
+                active={active}
+                setWhat={setWhat}
+                setActive={setActive}
               />} 
             />
             <Route path='/listings' element={

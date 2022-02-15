@@ -16,7 +16,7 @@ export default class Orders extends React.Component<OrderProps> {
   }
 
   componentDidMount() {
-    this.props.setActive('');
+    this.props.setActive('3');
   }
 
   render(): React.ReactNode {

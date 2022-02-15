@@ -2,7 +2,7 @@ import React from "react";
 import APIURL from "../helpers/environment";
 import { Navigate } from 'react-router-dom';
 import { AppProps } from "../../App";
-import { Button, Container } from '@mantine/core';
+import { Container } from '@mantine/core';
 import UserMap from "./UserMap";
 
 type UserProps = {
@@ -44,11 +44,12 @@ export default class Users extends React.Component<UserProps, UserState> {
         })
       })
       .then(res => {
-        console.log(res)
         return res.json()
       })
       .then(res => {
-        console.log(res)
+        this.state._isMounted && this.setState({
+          users: [...res]
+        })
       })
       .catch(error => console.log(error))
     } else {
@@ -72,16 +73,17 @@ export default class Users extends React.Component<UserProps, UserState> {
   }
 
   componentDidMount() {
-    this.props.setActive('');
+    this.props.setActive('1');
     this.setState({
       _isMounted: true,
     })
-    this.fetchUsers();
   }
 
-  // componentDidUpdate() {
-
-  // }
+  componentDidUpdate(prevProps:Readonly<UserProps>, prevState:Readonly<UserState>) {
+    if (this.state._isMounted !== prevState._isMounted && this.state._isMounted === true) {
+      this.fetchUsers();
+    }
+  }
 
   componentWillUnmount() {
     this.setState({

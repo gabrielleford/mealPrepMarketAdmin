@@ -30,16 +30,19 @@ export default class Navbar extends React.Component<NavbarProps, NavbarState> {
         {this.props.sessionToken && 
           <Container mt='xl'>
             <Group>
+              <label className="activeContainer" htmlFor="empty">
+                <input id="empty" name='radio' type='radio' className="activeInput" value='empty' checked={this.props.active === 'empty' ? true : false} onChange={() => this.props.setActive('empty')} />
+              </label>
               <label className="activeContainer" htmlFor="users">
-                <input id='users' name="radio" type='radio' className="activeInput" defaultChecked value={this.props.active} onChange={() => this.props.setActive('users')} />
+                <input id='users' name="radio" type='radio' className="activeInput" checked={this.props.active === 'users' ? true : this.props.active === '1' ? true : false} value={this.props.active} onChange={() => this.props.setActive('users')} />
                 <span id='usersBtn' className="activeLabel" onChange={() => this.props.setActive('users')} >Users</span>
               </label>
               <label className="activeContainer" htmlFor="listings">
-                <input id='listings' name="radio" type='radio' className="activeInput" value={this.props.active} onChange={() => this.props.setActive('listings')} />
+                <input id='listings' name="radio" type='radio' className="activeInput" checked={this.props.active === 'listings' ? true : this.props.active === '2' ? true : false} value={this.props.active} onChange={() => this.props.setActive('listings')} />
                 <span id='listingsBtn' className="activeLabel" onChange={() => this.props.setActive('listings')}>Listings</span>
               </label>
               <label className="activeContainer" htmlFor="orders">
-                <input id="orders" name="radio" type='radio' className="activeInput" value={this.props.active} onChange={() => this.props.setActive('orders')} />
+                <input id="orders" name="radio" type='radio' className="activeInput" checked={this.props.active === 'orders' ? true : this.props.active === '3' ? true : false} value={this.props.active} onChange={() => this.props.setActive('orders')} />
                 <span id='ordersBtn' className="activeLabel" onChange={() => this.props.setActive('orders')}>Orders</span>
               </label>
               {this.props.sessionToken &&
