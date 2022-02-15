@@ -185,6 +185,7 @@ function App() {
             />
             <Route path='/orders' element={
               <Orders 
+                sessionToken={sessionToken}
                 setActive={setActive} 
               />} 
             />

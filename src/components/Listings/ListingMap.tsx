@@ -34,6 +34,11 @@ export default class ListingMap extends React.Component<MapProps, MapState> {
         return (
           <tr key={index} style={{cursor: 'pointer'}}>
           <td style={{textAlign: 'center'}} onClick={() => this.toggleListing(listing.id)}>{index + 1}</td>
+          <td>
+            <Center>
+              <Avatar size='lg' src={listing.image} />
+            </Center>
+          </td>
           <td style={{textAlign: 'center'}} onClick={() => this.toggleListing(listing.id)}>{listing.title}</td>
           <td style={{textAlign: 'center'}} onClick={() => this.toggleListing(listing.id)}>${listing.price} USD</td>
           <td style={{textAlign: 'center', maxWidth: '100px'}}>
@@ -45,11 +50,6 @@ export default class ListingMap extends React.Component<MapProps, MapState> {
               <p key={tag}>{tag}</p>
             )
           })}</td>
-          <td>
-            <Center>
-              <Avatar size='lg' src={listing.image} />
-            </Center>
-          </td>
         </tr>
         )
       })
@@ -74,11 +74,11 @@ export default class ListingMap extends React.Component<MapProps, MapState> {
         <thead>
           <tr>
             <th style={{textAlign: 'center', color: '#edf5e1'}}>ID</th>
+            <th style={{textAlign: 'center', color: '#edf5e1'}}>Image</th>
             <th style={{textAlign: 'center', color: '#edf5e1'}}>Title</th>
             <th style={{textAlign: 'center', color: '#edf5e1'}}>Price</th>
             <th style={{textAlign: 'center', color: '#edf5e1', maxWidth: '100px'}}>Description</th>
             <th style={{textAlign: 'center', color: '#edf5e1'}}>Tags</th>
-            <th style={{textAlign: 'center', color: '#edf5e1'}}>Image</th>
           </tr>
         </thead>
         <tbody>{this.listingMap()}</tbody>
