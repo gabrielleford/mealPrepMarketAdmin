@@ -55,17 +55,17 @@ export default class ConfirmDelete extends React.Component<DeleteProps, DeleteSt
     switch(this.props.what) {
       case 'listing':
         this.setState({
-          endpoint: `/listing/${this.props.endpointID}`
+          endpoint: `/listing/delete/${this.props.endpointID}`
         });
         break;
       case 'user':
         this.setState({
-          endpoint: `/user/${this.props.endpointID}`
+          endpoint: `/user/delete/${this.props.endpointID}`
         })
         break;
       case 'order':
         this.setState({
-          endpoint: `/order/${this.props.endpointID}`
+          endpoint: `/order/delete/${this.props.endpointID}`
         })
         break;
     }

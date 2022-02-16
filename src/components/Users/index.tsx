@@ -103,7 +103,6 @@ export default class Users extends React.Component<UserProps, UserState> {
   }
 
   render(): React.ReactNode {
-    console.log(this.props.user.role);
     return (
       <Container mt={'60px'}>
         {this.props.user.role !== '' && <UserMap users={this.state.users} app={{...this.props}} />}

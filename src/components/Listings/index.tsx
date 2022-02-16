@@ -56,7 +56,7 @@ export default class Listings extends React.Component<ListingProps, ListingState
   }
 
   fetchListings = async ():Promise<void> => {
-    await fetch(`${APIURL}/listing/`, {
+    await fetch(`${APIURL}/listing/all`, {
       method: "GET",
       headers: new Headers({
         'Content-Type': 'application/json'

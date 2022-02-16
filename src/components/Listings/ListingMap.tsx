@@ -2,7 +2,7 @@ import React from "react";
 import { Navigate } from 'react-router-dom';
 import { ListingState } from ".";
 import { ListingProps } from ".";
-import { Avatar, Button, Center, Spoiler, Table } from '@mantine/core';
+import { Avatar, Button, Center, Spoiler, Table, Text } from '@mantine/core';
 
 type MapProps = {
   listings: ListingState['listings']
@@ -34,24 +34,28 @@ export default class ListingMap extends React.Component<MapProps, MapState> {
     return (
       this.props.listings.map((listing, index) => {
         return (
-          <tr key={index} style={{cursor: 'pointer'}}>
+          <tr key={index}>
           <td style={{textAlign: 'center'}} onClick={() => this.toggleListing(listing.id)}>{index + 1}</td>
           <td>
             <Center>
               <Avatar size='lg' src={listing.image} />
             </Center>
           </td>
-          <td style={{textAlign: 'center'}} onClick={() => this.toggleListing(listing.id)}>{listing.title}</td>
-          <td style={{textAlign: 'center'}} onClick={() => this.toggleListing(listing.id)}>${listing.price} USD</td>
+          <td style={{textAlign: 'center', cursor: 'pointer'}} onClick={() => this.toggleListing(listing.id)}>{listing.title}</td>
+          <td style={{textAlign: 'center', cursor: 'pointer'}} onClick={() => this.toggleListing(listing.id)}>${listing.price} USD</td>
           <td style={{textAlign: 'center', maxWidth: '100px'}}>
-            <Spoiler maxHeight={45} showLabel='View more' hideLabel='showLess'>
+            <Spoiler maxHeight={45} showLabel='View more' hideLabel='Show less'>
               {listing.description}
             </Spoiler></td>
-          <td style={{textAlign: 'center'}} onClick={() => this.toggleListing(listing.id)}>{listing.tag.map(tag => {
-            return(
-              <p key={tag}>{tag}</p>
-            )
-          })}</td>
+          <td style={{textAlign: 'center', height: 'fit-content'}}>
+              <Spoiler maxHeight={50} showLabel='View more' hideLabel='Show less'>
+                  {listing.tag.map(tag => {
+                  return(
+                    <Text key={tag}>{tag}</Text>
+                  )
+                })}
+              </Spoiler>
+            </td>
           <td 
             className='tableDlt' 
             style={{textAlign: 'center', cursor: 'pointer'}}>

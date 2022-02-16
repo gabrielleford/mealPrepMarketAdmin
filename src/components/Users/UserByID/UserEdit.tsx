@@ -300,7 +300,7 @@ updateUserProfilePic = async (encodedImg: string):Promise<void> => {
     const cloudinary = await res.json();
     console.log(cloudinary);
 
-    await fetch(`${APIURL}/user/${this.state.profileID}`, {
+    await fetch(`${APIURL}/user/edit/${this.state.profileID}`, {
       method: 'PUT',
       body: JSON.stringify({
         user: {
@@ -339,7 +339,7 @@ updateUserProfilePic = async (encodedImg: string):Promise<void> => {
 }
 
 updateUserInfo = async ():Promise<void> => {
-  await fetch(`${APIURL}/user/${this.state.profileID}`, {
+  await fetch(`${APIURL}/user/edit/${this.state.profileID}`, {
     method: 'PUT',
     body: JSON.stringify({
       user: {

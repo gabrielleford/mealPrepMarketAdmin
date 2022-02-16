@@ -74,7 +74,7 @@ export default class Orders extends React.Component<OrderProps, OrderState> {
   }
 
   fetchOrders = async ():Promise<void> => {
-    await fetch(`${APIURL}/order/`, {
+    await fetch(`${APIURL}/order/orders`, {
       method: 'GET',
       headers: new Headers({
         'Content-Type': 'application/json',

@@ -68,7 +68,7 @@ class ListingById extends React.Component<ListingProps, ListingState> {
   }
 
   fetchListing = async ():Promise<void> => {
-    await fetch(`${APIURL}/listing/${this.state.listingID}`,{
+    await fetch(`${APIURL}/listing/one/${this.state.listingID}`,{
       method: "GET",
       headers: new Headers({
         'Content-Type': 'application/json',
