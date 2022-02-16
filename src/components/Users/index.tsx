@@ -44,7 +44,7 @@ export default class Users extends React.Component<UserProps, UserState> {
 
   fetchUsers = async ():Promise<void> => {
     if (this.props.user.role === 'main admin') {
-      await fetch(`${APIURL}/user/admins`, {
+      await fetch(`${APIURL}/admin/admins`, {
         method: "GET",
         headers: new Headers({
           'Content-Type': 'application/json',
@@ -60,8 +60,8 @@ export default class Users extends React.Component<UserProps, UserState> {
         })
       })
       .catch(error => console.log(error))
-    } else {
-      await fetch(`${APIURL}/user/users`, {
+    } else if (this.props.user.role === 'admin') {
+      await fetch(`${APIURL}/admin/users`, {
         method: 'GET',
         headers: new Headers({
           'Content-Type': 'application/json',
@@ -91,6 +91,9 @@ export default class Users extends React.Component<UserProps, UserState> {
     if (this.state._isMounted !== prevState._isMounted && this.state._isMounted === true) {
       this.fetchUsers();
     }
+    if (this.props.user.role !== prevProps.user.role) {
+      this.fetchUsers();
+    }
   }
 
   componentWillUnmount() {
@@ -100,9 +103,10 @@ export default class Users extends React.Component<UserProps, UserState> {
   }
 
   render(): React.ReactNode {
+    console.log(this.props.user.role);
     return (
       <Container mt={'60px'}>
-        <UserMap users={this.state.users} app={{...this.props}} />
+        {this.props.user.role !== '' && <UserMap users={this.state.users} app={{...this.props}} />}
         {!localStorage.getItem('Authorization') && <Navigate to='/' replace={true} />}
       </Container>
     )

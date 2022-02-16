@@ -5,6 +5,7 @@ import {GoMail} from 'react-icons/go'
 import { FiLock } from 'react-icons/fi';
 import { BsEmojiDizzy, BsEmojiFrown } from 'react-icons/bs';
 import { Alert, Button, Center, Container, Grid, Input, Paper, PasswordInput, Title } from '@mantine/core';
+import { Banner, BannerH1 } from "./AuthElements";
 
 export type LoginProps = {
   sessionToken: AppProps['sessionToken'],
@@ -54,7 +55,7 @@ export default class Login extends React.Component<LoginProps, LoginState> {
       submitted: true,
     });
 
-    await fetch(`${APIURL}/admin/adminLogin`, {
+    await fetch(`${APIURL}/user/login`, {
       method: "POST",
       body: JSON.stringify({
         user: {
@@ -71,11 +72,13 @@ export default class Login extends React.Component<LoginProps, LoginState> {
         responseCode: res.status,
         submitted: false,
       })
+      console.log(res)
       return res.json()
     })
     .then(json => {
-      console.log(this.state.responseCode);
-      if ((this.state.responseCode === 201 && json.role === 'main admin') || (this.state.responseCode === 201 && json.role === 'admin')) {
+      console.log(json)
+      console.log(json.user.role);
+      if ((this.state.responseCode === 201 && json.user.role === 'main admin') || (this.state.responseCode === 201 && json.user.role === 'admin')) {
         this.props.updateToken(json.sessionToken);
         this.props.setSessionToken(json.sessionToken)
         this.state._isMounted && this.setState({
@@ -109,7 +112,10 @@ export default class Login extends React.Component<LoginProps, LoginState> {
 
   render(): React.ReactNode {
     return (
-      <Container className='formContainer' mt={150} size={600} padding='lg'>
+      <Container className='formContainer' size={600} padding='lg'>
+        <Banner>
+          <BannerH1>Welcome to Meal Prep Market for Admins!</BannerH1>
+        </Banner>
         <Paper className='form' sx={{paddingTop: 40, paddingBottom: 40, paddingLeft: 75, paddingRight: 75}} shadow='xl' radius='md'>
           <Title align='center' className='formTitle' order={1}>Login</Title>
           <Grid gutter='lg'>
@@ -138,7 +144,7 @@ export default class Login extends React.Component<LoginProps, LoginState> {
                 this.state.responseCode === 403 ?
                   <Alert icon={<BsEmojiFrown/>} title='Sorry' color='red' radius='md' withCloseButton onClose={() => this.setState({
                     responseCode: 0
-                  })}>Internal Error</Alert> : ''
+                  })}>Forbidden</Alert> : ''
                 }
               </Center>
             </Grid.Col>
