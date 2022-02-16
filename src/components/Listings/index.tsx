@@ -92,7 +92,7 @@ export default class Listings extends React.Component<ListingProps, ListingState
         <Button className='adminButton' color='secondary' size='lg' radius='lg' sx={{color: '#edf5e1'}} compact onClick={this.createListing}>Create</Button>
         <ListingMap listings={this.state.listings} app={{...this.props}} />
         {this.state.create && <Navigate to='/create' replace={true} />}
-                {!localStorage.getItem('Authorization') && <Navigate to='/' replace={true}/>}
+        {!localStorage.getItem('Authorization') && <Navigate to='/' replace={true}/>}
       </Container>
     )
   }
