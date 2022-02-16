@@ -1,12 +1,12 @@
-let APIURL:string = '';
+let APIURL:string = 'https://mealprepmarket-server.herokuapp.com';
 
-switch (window.location.hostname) {
-  case 'localhost' || '127.0.0.1':
-    APIURL = 'https://mealprepmarket-server.herokuapp.com';
-    // APIURL = 'http://localhost:3001'
-    break;
-  case 'https://mealprepmarket-admin.herokuapp.com':
-    APIURL = 'https://mealprepmarket-server.herokuapp.com'
-}
+// switch (window.location.hostname) {
+//   case 'localhost' || '127.0.0.1':
+//     APIURL = 'https://mealprepmarket-server.herokuapp.com';
+//     // APIURL = 'http://localhost:3001'
+//     break;
+//   case 'https://mealprepmarket-admin.herokuapp.com':
+//     APIURL = 'https://mealprepmarket-server.herokuapp.com'
+// }
 
 export default APIURL;
