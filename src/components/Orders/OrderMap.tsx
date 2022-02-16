@@ -1,7 +1,8 @@
 import React from "react";
 import { Navigate } from 'react-router-dom';
-import { Avatar, Button, Center, Table } from '@mantine/core';
 import { OrderProps, OrderState } from ".";
+import ConfirmDelete from "../Delete";
+import { Avatar, Button, Center, Table } from '@mantine/core';
 
 type MapProps = {
   orders: OrderState['orders']
@@ -114,6 +115,7 @@ export default class OrderMap extends React.Component<MapProps, MapState> {
           </tr>
         </thead>
         <tbody>{this.orderMap()}</tbody>
+        {this.props.app.dlt && <ConfirmDelete sessionToken={this.props.app.sessionToken} what={this.props.app.what} dlt={this.props.app.dlt} setDlt={this.props.app.setDlt} endpointID={this.props.app.endpointID} setEndpointID={this.props.app.setEndpointID} response={this.props.app.response} setResponse={this.props.app.setResponse}/>}
         {this.state.route !== '' && <Navigate to={`/${this.state.routeTo}/${this.state.route}`} replace={true} />}
       </Table>
     )

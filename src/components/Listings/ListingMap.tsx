@@ -2,6 +2,7 @@ import React from "react";
 import { Navigate } from 'react-router-dom';
 import { ListingState } from ".";
 import { ListingProps } from ".";
+import ConfirmDelete from "../Delete";
 import { Avatar, Button, Center, Spoiler, Table, Text } from '@mantine/core';
 
 type MapProps = {
@@ -102,6 +103,7 @@ export default class ListingMap extends React.Component<MapProps, MapState> {
           </tr>
         </thead>
         <tbody>{this.listingMap()}</tbody>
+        {this.props.app.dlt && <ConfirmDelete sessionToken={this.props.app.sessionToken} what={this.props.app.what} dlt={this.props.app.dlt} setDlt={this.props.app.setDlt} endpointID={this.props.app.endpointID} setEndpointID={this.props.app.setEndpointID} response={this.props.app.response} setResponse={this.props.app.setResponse}/>}
         {this.state.route !== '' && <Navigate to={`/listing/${this.state.route}`} replace={true} />}
       </Table>
     )

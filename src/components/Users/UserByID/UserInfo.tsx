@@ -74,7 +74,7 @@ export default class UserInfo extends React.Component<UserProps, UserState> {
   }
 
   fetchUser = async ():Promise<void> => {
-    await fetch(`${APIURL}/user/any/${this.state.profileID}`, {
+    await fetch(`${APIURL}/admin/any/${this.state.profileID}`, {
       method: "GET",
       headers: new Headers({
         'Content-Type': 'application/json',
