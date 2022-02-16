@@ -2,9 +2,10 @@ import React, { ChangeEvent } from "react";
 import APIURL from "../../helpers/environment";
 import { Buffer } from "buffer";
 import { Link, Navigate } from "react-router-dom";
+import { BsEmojiDizzy, BsEmojiFrown } from 'react-icons/bs';
 import ListingById, { ListingProps, ListingState } from ".";
 import ConfirmDelete from "../../Delete";
-import { Badge, Button, Card, Center, Grid, Group, Image, Input, NumberInput, Spoiler, Text, Title, Textarea } from "@mantine/core";
+import { Alert, Badge, Button, Card, Center, Group, Image, Input, NumberInput, Spoiler, Text, Title, Textarea } from "@mantine/core";
 
 type EditProps = {
   app: ListingProps,
@@ -26,6 +27,8 @@ export type EditState = {
   editTitle: boolean,
   editTags: boolean,
   editPrice: boolean,
+  submitted: boolean,
+  errorMessage: string,
   _isMounted: boolean,
 }
 
@@ -45,6 +48,8 @@ export default class ListingEdit extends React.Component<EditProps, EditState> {
       editTitle: false,
       editTags: false,
       editPrice: false,
+      submitted: false,
+      errorMessage: '',
       _isMounted: false,
     }
 
@@ -264,8 +269,14 @@ updateListingImage = async (encodedImg: string):Promise<void> => {
       this.state._isMounted && this.setState({
         responseCode: res.status
       })
+      return res.json()
     })
-    .then(() => {
+    .then(res => {
+      if (this.state.responseCode === 400) {
+        this.state._isMounted && this.setState({
+          errorMessage: res.message
+        })
+      }
       this.state._isMounted && this.setState({
         file: '',
         previewSrc: '',
@@ -275,7 +286,7 @@ updateListingImage = async (encodedImg: string):Promise<void> => {
         editTags: false,
         editTitle: false,
         inputVisible: false,
-        responseCode: 0,
+        submitted: false,
       })
       this.props.fetchListing()
     })
@@ -307,6 +318,11 @@ updateListingInfo = async ():Promise<void> => {
   })
   .then(res => {
     console.log(res)
+    if (this.state.responseCode === 400) {
+      this.state._isMounted && this.setState({
+        errorMessage: res.message
+      })
+    }
     this.state._isMounted &&  this.setState({
       file: '',
       previewSrc: '',
@@ -316,7 +332,7 @@ updateListingInfo = async ():Promise<void> => {
       editTitle: false,
       editTags: false,
       inputVisible: false,
-      responseCode: 0,
+      submitted: false,
     })
     this.props.fetchListing()
   })
@@ -361,13 +377,18 @@ updateListingInfo = async ():Promise<void> => {
         </Center>
         {this.state.inputVisible &&
           <Group mt='sm' position="center">
-            <Button onClick={this.handleUpdate} className="formButton" size="sm" radius='md' compact >Save Changes</Button>
+            <Button onClick={this.handleUpdate} className="formButton" size="sm" radius='md' compact loading={this.state.submitted && this.state.responseCode !== 201 ? true : false} >Save Changes</Button>
             <Button onClick={this.cancelEdit} className='formButton' size="sm" radius='md' compact>Cancel</Button>
           </Group>
         }
         <Group mt='lg' position="center">
           <Button className="formButton" size="lg" radius='md' compact onClick={() => console.log('delete')}>Delete</Button>
         </Group>
+        {this.state.responseCode === 500 ?
+          <Alert icon={<BsEmojiFrown/>} title='Sorry' color='red' radius='md' withCloseButton onClose={() => this.setState({responseCode: 0})}>Internal Error</Alert> :
+        this.state.responseCode === 400 ?
+          <Alert icon={<BsEmojiDizzy/>} title='Oops!' color='red' radius='md' withCloseButton onClose={() => this.setState({responseCode: 0})}>{this.state.errorMessage}</Alert> : ''
+        }
         {this.props.app.dlt && <ConfirmDelete sessionToken={this.props.app.sessionToken} what={this.props.app.what} dlt={this.props.app.dlt} setDlt={this.props.app.setDlt} endpointID={this.props.app.endpointID} setEndpointID={this.props.app.setEndpointID} response={this.props.app.response} setResponse={this.props.app.setResponse}/>}
         {!localStorage.getItem('Authorization') && <Navigate to='/' replace={true} />}
         {this.props.app.response === 200 && <Navigate to='/listings' replace={true} />}

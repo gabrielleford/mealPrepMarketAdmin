@@ -1,9 +1,8 @@
 import React from "react";
 import APIURL from "../../helpers/environment";
-import { Link, Navigate } from "react-router-dom";
+import { Navigate } from "react-router-dom";
 import { AppProps } from "../../../App";
-import { BsEmojiDizzy, BsEmojiFrown } from 'react-icons/bs';
-import { Alert, Badge, Button, Card, Center, Container, Grid, Group, Image, Select, Text, Title } from "@mantine/core";
+import { Container } from "@mantine/core";
 import ListingEdit from "./ListingEdit";
 
 export type ListingProps = {
@@ -103,6 +102,8 @@ class ListingById extends React.Component<ListingProps, ListingState> {
       case 'title': 
           value.length < 3 ? this.setState({
             titleErr: true
+          }) : this.state.fetchedListing.title.length >= 3 ? this.setState({
+            titleErr: false
           }) : this.setState({
             titleErr: false
           })
@@ -112,6 +113,8 @@ class ListingById extends React.Component<ListingProps, ListingState> {
             descriptionErr: true
           }) : value.length > 2000 ? this.setState({
             descriptionErr: true
+          }) : this.state.fetchedListing.description.length >= 20 ? this.setState({
+            descriptionErr: false
           }) : this.setState({
             descriptionErr: false
           })
@@ -121,6 +124,8 @@ class ListingById extends React.Component<ListingProps, ListingState> {
             priceErr: true
           }) : +value > 999.99 ? this.setState({
             priceErr: true
+          }) : this.state.fetchedListing.price >= 1 ? this.setState({
+            priceErr: false
           }) : this.setState({
             priceErr: false
           })

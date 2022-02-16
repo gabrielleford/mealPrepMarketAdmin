@@ -56,7 +56,6 @@ function App() {
   const [dlt, setDlt] = useState<boolean>(false);
   const [endpointID, setEndPointID] = useState<string>('');
   const [response, setResponse] = useState<number>(0);
-  const [prevPath, setPrevPath] = useState<string>('');
   const [user, setUser] = useState<{
     userId: string,
     firstName: string,
