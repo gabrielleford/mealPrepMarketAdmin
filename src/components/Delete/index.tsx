@@ -1,7 +1,6 @@
 import React from "react";
 import APIURL from "../helpers/environment";
-import { Navigate } from 'react-router-dom';
-import { Button, Center, Container, Group, Image, Modal, Paper, Text, Title } from '@mantine/core';
+import { Button, Center, Container, Group, Image, Modal, Text, Title } from '@mantine/core';
 import { AppProps } from "../../App";
 
 type DeleteProps = {
