@@ -5,13 +5,17 @@ import { AppProps } from '../../App';
 import { Button, Container } from '@mantine/core';
 import ListingMap from './ListingMap';
 
-type ListingProps = {
+export type ListingProps = {
+  sessionToken: AppProps['sessionToken'],
   dlt: AppProps['dlt'],
   what: AppProps['what'],
   response: AppProps['response'],
+  endpointID: AppProps['endpointID'],
+  setEndpointID: AppProps['setEndpointID'],
   setActive: AppProps['setActive'],
   setDlt: AppProps['setDlt'],
   setResponse: AppProps['setResponse'],
+  setWhat: AppProps['setWhat'],
 }
 
 export type ListingState = {
@@ -86,7 +90,7 @@ export default class Listings extends React.Component<ListingProps, ListingState
     return (
       <Container mt={'60px'}>
         <Button className='adminButton' color='secondary' size='lg' radius='lg' sx={{color: '#edf5e1'}} compact onClick={this.createListing}>Create</Button>
-        <ListingMap listings={this.state.listings} />
+        <ListingMap listings={this.state.listings} app={{...this.props}} />
         {this.state.create && <Navigate to='/create' replace={true} />}
                 {!localStorage.getItem('Authorization') && <Navigate to='/' replace={true}/>}
       </Container>

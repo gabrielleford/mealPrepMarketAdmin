@@ -12,10 +12,10 @@ export type UserProps = {
   what: AppProps['what'],
   endpointID: AppProps['endpointID'],
   response: AppProps['response'],
+  setEndpointID: AppProps['setEndpointID'],
   setActive: AppProps['setActive'],
   setDlt: AppProps['setDlt'],
   setWhat: AppProps['setWhat'],
-  setEndpointID: AppProps['setEndpointID'],
   setResponse: AppProps['setResponse'],
 }
 

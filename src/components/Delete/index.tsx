@@ -54,19 +54,19 @@ export default class ConfirmDelete extends React.Component<DeleteProps, DeleteSt
 
   setWhat = ():void => {
     switch(this.props.what) {
-      // case 'listing':
-      //   this.setState({
-      //     endpoint: `/listing/${this.props.listingID}`
-      //   });
-      //   break;
-      // case 'user':
-      //   this.setState({
-      //     endpoint: `/user/${this.props.app.userId}`
-      //   })
-      //   break;
+      case 'listing':
+        this.setState({
+          endpoint: `/listing/${this.props.endpointID}`
+        });
+        break;
+      case 'user':
+        this.setState({
+          endpoint: `/user/${this.props.endpointID}`
+        })
+        break;
       case 'order':
         this.setState({
-
+          endpoint: `/order/${this.props.endpointID}`
         })
         break;
     }
@@ -74,21 +74,20 @@ export default class ConfirmDelete extends React.Component<DeleteProps, DeleteSt
 
   delete = async ():Promise<void> => {
     console.log(`${this.props.what} deleted`);
-    this.props.setResponse(200);
-    // await fetch(`${APIURL}${this.state.endpoint}`, {
-    //   method: 'DELETE',
-    //   headers: new Headers({
-    //     'Content-Type': 'application/json',
-    //     authorization: `Bearer ${this.props.app.sessionToken}`
-    //   })
-    // })
-    // .then(res => {
-    //   this.state._isMounted && this.props.app.setResponse(res.status);
-    //   return res.json();
-    // })
-    // .then(res => {
-    //   this.state._isMounted && console.log(res);
-    // })
+    await fetch(`${APIURL}${this.state.endpoint}`, {
+      method: 'DELETE',
+      headers: new Headers({
+        'Content-Type': 'application/json',
+        authorization: `Bearer ${this.props.sessionToken}`
+      })
+    })
+    .then(res => {
+      this.state._isMounted && this.props.setResponse(res.status);
+      return res.json();
+    })
+    .then(res => {
+      this.state._isMounted && console.log(res);
+    })
   }
 
   componentDidMount() {
@@ -109,34 +108,29 @@ export default class ConfirmDelete extends React.Component<DeleteProps, DeleteSt
       _isMounted: false
     });
     this.props.setDlt(false);
+    this.props.setResponse(0);
   }
 
   render(): React.ReactNode {
+    console.log(this.props.what);
+    console.log(this.props.endpointID);
+    console.log(this.state.endpoint);
     return (
       <Container>
-        <Modal id='modal' centered={true} padding='xl' opened={this.props.dlt} onClose={() => this.props.setDlt(false)}>
+        <Modal id='modal' radius='md' centered={true} padding='xl' opened={this.props.dlt} onClose={() => this.props.setDlt(false)}>
             <Center>
-              <Title mt={-50} sx={{color: '#5cdb95'}} order={1}>Are you sure?</Title>
+              <Title mt={-50} sx={{color: '#05386b'}} order={1}>Are you sure?</Title>
             </Center>
-            <Image sx={{margin: '0 auto'}} src={this.state.gif} />
+            <Image radius='sm' sx={{margin: '0 auto'}} src={this.state.gif} />
             <Center>
-
-            <Text>This is <strong>irreversible</strong></Text>
+              <Text size='xl' sx={{color: '#05386b'}}>This is <strong>irreversible</strong></Text>
             </Center>
-            <Group position="center">
-              <Button className="formButton" size="lg" radius='md' compact>Delete</Button>
+            <Group mt='xl' position="center">
+              <Button className="formButton" size="lg" radius='md' compact onClick={this.delete}>Delete</Button>
               <Button className="formButton" size='lg' radius='md' compact onClick={() => this.props.setDlt(false)}>Cancel</Button>
             </Group>
         </Modal>
-        {(this.props.what === 'user' && this.props.response === 200) ?
-          <Navigate to='/users' replace={true} /> :
-        (this.props.what === 'listing' && this.props.response === 200) ?
-          <Navigate to='/listings' replace={true} /> :
-        (this.props.what === '/order' && this.props.response === 200) ?
-          <Navigate to='/orders' replace={true} /> :
-        !localStorage.getItem('Authorization') ?
-          <Navigate to='/' replace={true} /> : ''
-        }
+        {this.props.response === 200 && this.props.setDlt(false)}
       </Container>
     )
   }

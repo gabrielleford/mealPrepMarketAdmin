@@ -5,11 +5,13 @@ import { AppProps } from "../../App";
 import OrderMap from "./OrderMap";
 import { Container } from '@mantine/core';
 
-type OrderProps = {
+export type OrderProps = {
   sessionToken: AppProps['sessionToken'],
   dlt: AppProps['dlt'],
   what: AppProps['what'],
   response: AppProps['response'],
+  endpointID: AppProps['endpointID'],
+  setEndpointID: AppProps['setEndpointID'],
   setActive: AppProps['setActive'],
   setWhat: AppProps['setWhat'],
   setDlt: AppProps['setDlt'],
@@ -97,12 +99,6 @@ export default class Orders extends React.Component<OrderProps, OrderState> {
     this.fetchOrders();
   }
 
-  componentDidUpdate(prevProps:Readonly<OrderProps>, prevState:Readonly<OrderState>) {
-    // if (this.state._isMounted !== prevState._isMounted) {
-    //   this.fetchOrders();
-    // }
-  }
-
   componentWillUnmount() {
     this.setState({
       _isMounted: false
@@ -112,7 +108,7 @@ export default class Orders extends React.Component<OrderProps, OrderState> {
   render(): React.ReactNode {
     return (
       <Container mt={'60px'}>
-        <OrderMap orders={this.state.orders} />
+        <OrderMap orders={this.state.orders} app={{...this.props}} />
         {!localStorage.getItem('Authorization') && <Navigate to='/' replace={true}/>}
       </Container>
     )

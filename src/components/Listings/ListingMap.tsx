@@ -1,10 +1,12 @@
 import React from "react";
 import { Navigate } from 'react-router-dom';
 import { ListingState } from ".";
-import { Avatar, Center, Spoiler, Table } from '@mantine/core';
+import { ListingProps } from ".";
+import { Avatar, Button, Center, Spoiler, Table } from '@mantine/core';
 
 type MapProps = {
   listings: ListingState['listings']
+  app: ListingProps
 }
 
 type MapState = {
@@ -50,6 +52,18 @@ export default class ListingMap extends React.Component<MapProps, MapState> {
               <p key={tag}>{tag}</p>
             )
           })}</td>
+          <td 
+            className='tableDlt' 
+            style={{textAlign: 'center', cursor: 'pointer'}}>
+              <Button 
+                className="formButton"
+                compact
+                onClick={() => {
+                  this.props.app.setEndpointID(listing.id)
+                  this.props.app.setDlt(true)}}>
+                Delete
+              </Button>
+          </td>
         </tr>
         )
       })
@@ -60,6 +74,7 @@ export default class ListingMap extends React.Component<MapProps, MapState> {
     this.setState({
       _isMounted: true
     })
+    this.props.app.setWhat('listing')
   }
 
   componentWillUnmount() {
@@ -79,6 +94,7 @@ export default class ListingMap extends React.Component<MapProps, MapState> {
             <th style={{textAlign: 'center', color: '#edf5e1'}}>Price</th>
             <th style={{textAlign: 'center', color: '#edf5e1', maxWidth: '100px'}}>Description</th>
             <th style={{textAlign: 'center', color: '#edf5e1'}}>Tags</th>
+            <th style={{textAlign: 'center', color: '#edf5e1'}}>Options</th>
           </tr>
         </thead>
         <tbody>{this.listingMap()}</tbody>

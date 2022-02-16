@@ -19,6 +19,7 @@ export type AppProps = {
   dlt: boolean
   response: number,
   endpointID: string,
+  prevPath: string,
   user: {
     userId: string,
     firstName: string,
@@ -36,6 +37,7 @@ export type AppProps = {
   setDlt: (dlt: boolean) => void,
   setResponse: (response: number) => void,
   setEndpointID: (endpointID: string) => void,
+  setPrevPath: (prevPath: string) => void,
   setUser: (user: {
     userId: string,
     firstName: string,
@@ -54,6 +56,7 @@ function App() {
   const [dlt, setDlt] = useState<boolean>(false);
   const [endpointID, setEndPointID] = useState<string>('');
   const [response, setResponse] = useState<number>(0);
+  const [prevPath, setPrevPath] = useState<string>('');
   const [user, setUser] = useState<{
     userId: string,
     firstName: string,
@@ -179,6 +182,8 @@ function App() {
                 what={what}
                 active={active}
                 response={response}
+                endpointID={endpointID}
+                setEndpointID={setEndPointID}
                 setResponse={setResponse}
                 setWhat={setWhat}
                 setActive={setActive}
@@ -187,12 +192,16 @@ function App() {
             />
             <Route path='/listings' element={
               <Listings 
+                sessionToken={sessionToken}
                 dlt={dlt}
                 what={what}
                 response={response}
+                endpointID={endpointID}
+                setEndpointID={setEndPointID}
                 setResponse={setResponse}
                 setActive={setActive}
                 setDlt={setDlt}
+                setWhat={setWhat}
               />} 
             />
             <Route path='/listing/:id' element={
@@ -201,6 +210,8 @@ function App() {
                 dlt={dlt}
                 what={what}
                 response={response}
+                endpointID={endpointID}
+                setEndpointID={setEndPointID}
                 setResponse={setResponse}
                 setWhat={setWhat}
                 setActive={setActive}
@@ -219,6 +230,8 @@ function App() {
                 dlt={dlt}
                 what={what}
                 response={response}
+                endpointID={endpointID}
+                setEndpointID={setEndPointID}
                 setResponse={setResponse}
                 setActive={setActive}
                 setWhat={setWhat}

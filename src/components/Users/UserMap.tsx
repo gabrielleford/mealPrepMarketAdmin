@@ -56,6 +56,8 @@ export default class UserMap extends React.Component<MapProps, MapState> {
                   className='tableDlt' 
                   style={{textAlign: 'center', cursor: 'pointer'}}>
                     <Button 
+                      className="formButton"
+                      compact
                       onClick={() => {
                         this.props.app.setEndpointID(user.id)
                         this.props.app.setDlt(true)}}>

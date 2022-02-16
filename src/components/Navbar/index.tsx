@@ -1,7 +1,7 @@
 import React from "react";
 import { Navigate } from 'react-router-dom';
 import { BiLogOutCircle } from 'react-icons/bi';
-import { Button, Container, Group } from '@mantine/core';
+import { Button, Container, Group, Title } from '@mantine/core';
 import { AppProps } from "../../App";
 
 type NavbarProps = {
@@ -28,8 +28,9 @@ export default class Navbar extends React.Component<NavbarProps, NavbarState> {
     return (
       <>
         {this.props.sessionToken && 
-          <Container mt='xl'>
+          <Container mt='xl' fluid>
             <Group>
+              <Title order={2} sx={{fontWeight: '400', color: '#05386b', marginLeft: '-10rem'}}>Meal Prep Market</Title>
               <label className="activeContainer" htmlFor="empty">
                 <input id="empty" name='radio' type='radio' className="activeInput" value='empty' checked={this.props.active === 'empty' ? true : false} onChange={() => this.props.setActive('empty')} />
               </label>

@@ -3,10 +3,11 @@ import APIURL from "../../helpers/environment";
 import { Buffer } from "buffer";
 import { Link, Navigate } from "react-router-dom";
 import ListingById, { ListingProps, ListingState } from ".";
+import ConfirmDelete from "../../Delete";
 import { Badge, Button, Card, Center, Grid, Group, Image, Input, NumberInput, Spoiler, Text, Title, Textarea } from "@mantine/core";
 
 type EditProps = {
-  sessionToken: ListingProps['sessionToken'],
+  app: ListingProps,
   listingState: ListingState
   handleChange: ListingById['handleChange'],
   handleNumber: ListingById['handleNumber'],
@@ -99,12 +100,12 @@ export default class ListingEdit extends React.Component<EditProps, EditState> {
           <>
             {this.props.listingState.fetchedListing.description.length > 255 ?
               <Spoiler maxHeight={70} showLabel='View more' hideLabel='View less'>
-                <Text mt={-40} style={{paddingTop: '70px'}} className="description" onClick={() => this.setEdit('description')}>{this.props.listingState.fetchedListing.description}
+                <Text mt={-40} style={{paddingTop: '55px'}} className="description" onClick={() => this.setEdit('description')}>{this.props.listingState.fetchedListing.description}
                 <br/>
                 {this.renderPrice()}
                 </Text>
               </Spoiler> :
-              <Text mt={-40} style={{paddingTop: '70px'}} className="description" onClick={() => this.setEdit('description')}>{this.props.listingState.fetchedListing.description}
+              <Text mt={-40} style={{paddingTop: '55px'}} className="description" onClick={() => this.setEdit('description')}>{this.props.listingState.fetchedListing.description}
               <br/>
               {this.renderPrice()}
               </Text>
@@ -126,8 +127,8 @@ export default class ListingEdit extends React.Component<EditProps, EditState> {
       if (!this.state.editPrice) {
         return (
           <Center>
-            <Badge mt={7} radius='lg' size="xl" onClick={() => this.setEdit('price')}>${this.props.listingState.fetchedListing.price} USD</Badge>
-        </Center>
+            <Badge mt={20} radius='lg' size="xl" onClick={() => this.setEdit('price')}>${this.props.listingState.fetchedListing.price} USD</Badge>
+          </Center>
         )
       }
     }
@@ -256,7 +257,7 @@ updateListingImage = async (encodedImg: string):Promise<void> => {
       }),
       headers: new Headers({
         'Content-Type': 'application/json',
-        authorization: `Bearer ${this.props.sessionToken}`
+        authorization: `Bearer ${this.props.app.sessionToken}`
       })
     })
     .then(res => {
@@ -295,7 +296,7 @@ updateListingInfo = async ():Promise<void> => {
     }),
     headers: new Headers({
       'Content-Type': 'application/json',
-      authorization: `Bearer ${this.props.sessionToken}`
+      authorization: `Bearer ${this.props.app.sessionToken}`
     })
   })
   .then(res => {
@@ -348,7 +349,7 @@ updateListingInfo = async ():Promise<void> => {
       <Card radius='lg' className="listingCard">
         {this.renderTitle()}
         <Group spacing={5} position="center"> 
-          <Text size="lg" sx={{color: '#379683', fontFamily: 'Open-Sans, sans-serif'}} align="center" variant="link" component={Link} to={`/user/${this.props.listingState.fetchedListing.ownerID}`}>{this.props.listingState.fetchedListing.user.firstName} {this.props.listingState.fetchedListing.user.lastName}</Text>
+          <Text size="lg" sx={{color: '#379683', fontFamily: 'Open-Sans, sans-serif'}} align="center" variant="link" component={Link} to={`/user/${this.props.listingState.fetchedListing.userId}`}>{this.props.listingState.fetchedListing.user.firstName} {this.props.listingState.fetchedListing.user.lastName}</Text>
         </Group>
         <Center>
           <Card.Section>
@@ -366,12 +367,10 @@ updateListingInfo = async ():Promise<void> => {
         }
         <Group mt='lg' position="center">
           <Button className="formButton" size="lg" radius='md' compact onClick={() => console.log('delete')}>Delete</Button>
-          {/* <Button component={Link} to={`/orders/${this.props.fetchedUser.id}`} className="formButton" size="lg" radius='md' compact>My Orders</Button> */}
         </Group>
-        {/* {this.props.dlt && 
-          <ConfirmDelete what={this.props.what} dlt={this.props.dlt} sessionToken={this.props.sessionToken} listingID={this.props.listingID} user={this.props.user} setDelete={this.props.setDelete} clearToken={this.props.clearToken} response={this.props.response} setResponse={this.props.setResponse} />
-        } */}
+        {this.props.app.dlt && <ConfirmDelete sessionToken={this.props.app.sessionToken} what={this.props.app.what} dlt={this.props.app.dlt} setDlt={this.props.app.setDlt} endpointID={this.props.app.endpointID} setEndpointID={this.props.app.setEndpointID} response={this.props.app.response} setResponse={this.props.app.setResponse}/>}
         {!localStorage.getItem('Authorization') && <Navigate to='/' replace={true} />}
+        {this.props.app.response === 200 && <Navigate to='/listings' replace={true} />}
       </Card>
     )
   }

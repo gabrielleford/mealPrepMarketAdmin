@@ -11,6 +11,8 @@ export type UserProps = {
   what: AppProps['what'],
   active: AppProps['active'],
   response: AppProps['response'],
+  endpointID: AppProps['endpointID'],
+  setEndpointID: AppProps['setEndpointID'],
   setWhat: AppProps['setWhat'],
   setActive: AppProps['setActive'],
   setDlt: AppProps['setDlt'],
@@ -93,7 +95,7 @@ export default class UserInfo extends React.Component<UserProps, UserState> {
     return (
     <Container id='userInfo'>
       <Card id='userCard' radius='lg' sx={{padding: '60px 0', width: '90%', margin: 'auto'}}>
-        <UserEdit fetchedUser={this.state.fetchedUser} handleChange={this.handleChange} changeRoleInfo={this.changeRoleInfo} sessionToken={this.props.sessionToken} fetchUser={this.fetchUser} />
+        <UserEdit fetchedUser={this.state.fetchedUser} handleChange={this.handleChange} changeRoleInfo={this.changeRoleInfo} app={{...this.props}} fetchUser={this.fetchUser}/>
       </Card>
       {
         !localStorage.getItem('Authorization') &&
@@ -112,10 +114,6 @@ export default class UserInfo extends React.Component<UserProps, UserState> {
     this.props.setWhat('user');
     this.props.setActive('empty')
   }
-
-  // componentDidUpdate(prevProps:Readonly<UserProps>, prevState:Readonly<UserState>) {
-
-  // }
 
   componentWillUnmount() {
     this.setState({

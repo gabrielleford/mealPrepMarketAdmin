@@ -1,10 +1,11 @@
 import React from "react";
 import { Navigate } from 'react-router-dom';
-import { Avatar, Center, Spoiler, Table } from '@mantine/core';
-import { OrderState } from ".";
+import { Avatar, Button, Center, Table } from '@mantine/core';
+import { OrderProps, OrderState } from ".";
 
 type MapProps = {
   orders: OrderState['orders']
+  app: OrderProps
 }
 
 type MapState = {
@@ -65,6 +66,18 @@ export default class OrderMap extends React.Component<MapProps, MapState> {
             <td style={{textAlign: 'center'}}>{order.quantity}</td>
             <td style={{textAlign: 'center'}}>${order.quantity * order.listing.price} USD</td>
             <td style={{textAlign: 'center'}}>{order.fulfillmentMethod.charAt(0).toUpperCase() + order.fulfillmentMethod.slice(1)}</td>
+            <td 
+            className='tableDlt' 
+            style={{textAlign: 'center', cursor: 'pointer'}}>
+              <Button 
+                className="formButton"
+                compact
+                onClick={() => {
+                  this.props.app.setEndpointID(order.id)
+                  this.props.app.setDlt(true)}}>
+                Delete
+              </Button>
+          </td>
           </tr>
         )
       })
@@ -75,6 +88,7 @@ export default class OrderMap extends React.Component<MapProps, MapState> {
     this.setState({
       _isMounted: true
     })
+    this.props.app.setWhat('orders');
   }
 
   componentWillUnmount() {
@@ -96,6 +110,7 @@ export default class OrderMap extends React.Component<MapProps, MapState> {
             <th style={{textAlign: 'center', color: '#edf5e1'}}>Quantity</th>
             <th style={{textAlign: 'center', color: '#edf5e1'}}>Order Total</th>
             <th style={{textAlign: 'center', color: '#edf5e1'}}>Fulfillment Method</th>
+            <th style={{textAlign: 'center', color: '#edf5e1'}}>Options</th>
           </tr>
         </thead>
         <tbody>{this.orderMap()}</tbody>

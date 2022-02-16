@@ -2,11 +2,12 @@ import React, { ChangeEvent } from "react";
 import APIURL from "../../helpers/environment";
 import { Buffer } from "buffer";
 import { Navigate } from "react-router-dom";
-import { Avatar, Button, Center, Grid, Group, Input, Select, Text, Textarea } from "@mantine/core";
 import UserInfo, { UserProps, UserState } from "./UserInfo";
+import ConfirmDelete from "../../Delete";
+import { Avatar, Button, Center, Grid, Group, Input, Select, Text, Textarea } from "@mantine/core";
 
 type EditProps = {
-  sessionToken: UserProps['sessionToken'],
+  app: UserProps
   fetchedUser: UserState['fetchedUser'],
   handleChange: UserInfo['handleChange'],
   changeRoleInfo: UserInfo['changeRoleInfo'],
@@ -313,7 +314,7 @@ updateUserProfilePic = async (encodedImg: string):Promise<void> => {
       }),
       headers: new Headers({
         'Content-Type': 'application/json',
-        authorization: `Bearer ${this.props.sessionToken}`
+        authorization: `Bearer ${this.props.app.sessionToken}`
       })
     })
     .then(res => {
@@ -352,7 +353,7 @@ updateUserInfo = async ():Promise<void> => {
     }),
     headers: new Headers({
       'Content-Type': 'application/json',
-      authorization: `Bearer ${this.props.sessionToken}`
+      authorization: `Bearer ${this.props.app.sessionToken}`
     })
   })
   .then(res => {
@@ -381,6 +382,8 @@ updateUserInfo = async ():Promise<void> => {
     this.setState({
       _isMounted: true,
     })
+    this.props.app.setWhat('user')
+    this.props.app.setEndpointID(this.props.fetchedUser.id)
   }
 
   componentDidUpdate(prevProps:Readonly<EditProps>, prevState:Readonly<EditState>) {
@@ -435,8 +438,7 @@ updateUserInfo = async ():Promise<void> => {
       }
       <Grid.Col>
         <Group mt='lg' position="center">
-          <Button className="formButton" size="lg" radius='md' compact onClick={() => console.log('delete')}>Delete</Button>
-          {/* <Button component={Link} to={`/orders/${this.props.fetchedUser.id}`} className="formButton" size="lg" radius='md' compact>My Orders</Button> */}
+          <Button className="formButton" size="lg" radius='md' compact onClick={() => this.props.app.setDlt(true)}>Delete</Button>
         </Group>
       </Grid.Col>
       <Grid.Col>
@@ -444,10 +446,9 @@ updateUserInfo = async ():Promise<void> => {
 
         </Center>
       </Grid.Col>
-        {/* {this.props.dlt && 
-          <ConfirmDelete what={this.props.what} dlt={this.props.dlt} sessionToken={this.props.sessionToken} listingID={this.props.listingID} user={this.props.user} setDelete={this.props.setDelete} clearToken={this.props.clearToken} response={this.props.response} setResponse={this.props.setResponse} />
-        } */}
-        {!localStorage.getItem('Authorization') && <Navigate to='/' replace={true} />}
+      {this.props.app.dlt && <ConfirmDelete sessionToken={this.props.app.sessionToken} what={this.props.app.what} dlt={this.props.app.dlt} setDlt={this.props.app.setDlt} endpointID={this.props.app.endpointID} setEndpointID={this.props.app.setEndpointID} response={this.props.app.response} setResponse={this.props.app.setResponse}/>}
+      {!localStorage.getItem('Authorization') && <Navigate to='/' replace={true} />}
+      {this.props.app.response === 200 && <Navigate to='/users' replace={true} />}
     </Grid>
     )
   }

@@ -11,6 +11,8 @@ export type ListingProps = {
   dlt: AppProps['dlt'],
   what: AppProps['what'],
   response: AppProps['response'],
+  endpointID: AppProps['endpointID'],
+  setEndpointID: AppProps['setEndpointID'],
   setActive: AppProps['setActive'],
   setDlt: AppProps['setDlt'],
   setWhat: AppProps['setWhat'],
@@ -25,7 +27,7 @@ export type ListingState = {
     image: string,
     price: number,
     tag: string,
-    ownerID: string,
+    userId: string,
     user: {
       firstName: string,
       lastName: string,
@@ -50,7 +52,7 @@ class ListingById extends React.Component<ListingProps, ListingState> {
         image: '',
         price: 0,
         tag: '',
-        ownerID: '',
+        userId: '',
         user: {
           firstName: '',
           lastName: '',
@@ -151,8 +153,8 @@ class ListingById extends React.Component<ListingProps, ListingState> {
 
   render(): React.ReactNode {
       return (
-        <Container id='listingById' mt={-115} size={700}>
-            <ListingEdit sessionToken={this.props.sessionToken} listingState={{...this.state}} handleChange={this.handleChange} handleNumber={this.handleNumber} fetchListing={this.fetchListing} />
+        <Container id='listingById' mt={30} size={700}>
+            <ListingEdit app={{...this.props}} listingState={{...this.state}} handleChange={this.handleChange} handleNumber={this.handleNumber} fetchListing={this.fetchListing} />
             {!localStorage.getItem('Authorization') && <Navigate to='/' replace={true}/>}
         </Container>
       )
