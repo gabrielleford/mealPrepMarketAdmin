@@ -5,7 +5,7 @@ switch (window.location.hostname) {
     // APIURL = 'https://mealprepmarket-server.herokuapp.com';
     APIURL = 'http://localhost:3001'
     break;
-  case 'https://mealprepmarket.herokuapp.com':
+  case 'https://mealprepmarket-admin.herokuapp.com':
     APIURL = 'https://mealprepmarket-server.herokuapp.com'
 }
 
