@@ -75,13 +75,17 @@ export default class Login extends React.Component<LoginProps, LoginState> {
     })
     .then(json => {
       console.log(this.state.responseCode);
-      if (this.state.responseCode === 201) {
+      if ((this.state.responseCode === 201 && json.role === 'main admin') || (this.state.responseCode === 201 && json.role === 'admin')) {
         this.props.updateToken(json.sessionToken);
         this.props.setSessionToken(json.sessionToken)
         this.state._isMounted && this.setState({
           user: json.user.id
         });
         this.state._isMounted && this.props.setActive('users');
+      } else {
+        this.setState({
+          responseCode: 403
+        })
       }
     })
     .catch(error => console.log(error))
@@ -127,7 +131,11 @@ export default class Login extends React.Component<LoginProps, LoginState> {
                   onClose={() => this.setState({
                     responseCode: 0
                   })}>Email or password incorrect</Alert> :
-                  this.state.responseCode === 500 ?
+                this.state.responseCode === 500 ?
+                  <Alert icon={<BsEmojiFrown/>} title='Sorry' color='red' radius='md' withCloseButton onClose={() => this.setState({
+                    responseCode: 0
+                  })}>Internal Error</Alert> :
+                this.state.responseCode === 403 ?
                   <Alert icon={<BsEmojiFrown/>} title='Sorry' color='red' radius='md' withCloseButton onClose={() => this.setState({
                     responseCode: 0
                   })}>Internal Error</Alert> : ''
