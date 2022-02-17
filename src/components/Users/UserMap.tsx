@@ -52,7 +52,7 @@ export default class UserMap extends React.Component<MapProps, MapState> {
                 <td style={{textAlign: 'center', cursor: 'pointer'}} onClick={() => this.toggleUser(user.id)}>{user.lastName}</td>
                 <td style={{textAlign: 'center', cursor: 'pointer'}} onClick={() => this.toggleUser(user.id)}>{user.email}</td>
                 <td style={{textAlign: 'center', cursor: 'pointer'}} onClick={() => this.toggleUser(user.id)}>{user.profileDescription}</td>
-                <td 
+                {this.props.app.user.userId !== user.id && <td 
                   className='tableDlt' 
                   style={{textAlign: 'center', cursor: 'pointer'}}>
                     <Button 
@@ -63,7 +63,7 @@ export default class UserMap extends React.Component<MapProps, MapState> {
                         this.props.app.setDlt(true)}}>
                       Delete
                     </Button>
-                </td>
+                </td>}
               </tr>
         )
       })

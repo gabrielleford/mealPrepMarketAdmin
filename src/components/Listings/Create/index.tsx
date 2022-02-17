@@ -278,7 +278,7 @@ class CreateListing extends React.Component<CreateProps, CreateState> {
               </Grid.Col>
           </Grid>
         </Paper>
-        {this.state.listingID ? 
+        {this.state.listingID !== '' ? 
         <Navigate to={`/listing/${this.state.listingID}`} replace={true} /> : 
         !localStorage.getItem('Authorization') ? 
         <Navigate to='/' replace={true} /> : ''

@@ -94,6 +94,12 @@ export default class Users extends React.Component<UserProps, UserState> {
     if (this.props.user.role !== prevProps.user.role) {
       this.fetchUsers();
     }
+    if (this.props.response !== prevProps.response && this.props.response === 200) {
+      this.fetchUsers();
+      this.props.setDlt(false);
+      this.props.setEndpointID('');
+      this.props.setResponse(0);
+    }
   }
 
   componentWillUnmount() {

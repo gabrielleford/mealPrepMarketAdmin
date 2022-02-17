@@ -37,7 +37,7 @@ export default class ListingMap extends React.Component<MapProps, MapState> {
         return (
           <tr key={index}>
           <td style={{textAlign: 'center'}} onClick={() => this.toggleListing(listing.id)}>{index + 1}</td>
-          <td>
+          <td style={{textAlign: 'center', cursor: 'pointer'}} onClick={() => this.toggleListing(listing.id)}>
             <Center>
               <Avatar size='lg' src={listing.image} />
             </Center>
@@ -80,6 +80,12 @@ export default class ListingMap extends React.Component<MapProps, MapState> {
       _isMounted: true
     })
     this.props.app.setWhat('listing')
+  }
+
+  componentDidUpdate(prevProps:Readonly<MapProps>, prevState:Readonly<MapState>) {
+    if (this.props.listings.length !== prevProps.listings.length) {
+      this.listingMap();
+    }
   }
 
   componentWillUnmount() {

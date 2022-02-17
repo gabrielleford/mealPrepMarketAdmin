@@ -78,6 +78,19 @@ export default class Listings extends React.Component<ListingProps, ListingState
       _isMounted: true,
     })
     this.fetchListings()
+    this.props.setDlt(false);
+    this.props.setEndpointID('');
+    this.props.setResponse(0);
+    this.fetchListings();
+  }
+
+  componentDidUpdate(prevProps:Readonly<ListingProps>, prevState:Readonly<ListingState>) {
+    if (this.props.response !== prevProps.response && this.props.response === 200) {
+      this.fetchListings();
+      this.props.setDlt(false);
+      this.props.setEndpointID('');
+      this.props.setResponse(0);
+    }
   }
 
   componentWillUnmount() {

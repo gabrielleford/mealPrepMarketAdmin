@@ -106,8 +106,6 @@ export default class ConfirmDelete extends React.Component<DeleteProps, DeleteSt
     this.setState({
       _isMounted: false
     });
-    this.props.setDlt(false);
-    this.props.setResponse(0);
   }
 
   render(): React.ReactNode {
@@ -129,7 +127,6 @@ export default class ConfirmDelete extends React.Component<DeleteProps, DeleteSt
               <Button className="formButton" size='lg' radius='md' compact onClick={() => this.props.setDlt(false)}>Cancel</Button>
             </Group>
         </Modal>
-        {this.props.response === 200 && this.props.setDlt(false)}
       </Container>
     )
   }

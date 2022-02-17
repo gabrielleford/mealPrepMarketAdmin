@@ -103,26 +103,24 @@ export default class ListingEdit extends React.Component<EditProps, EditState> {
       if (!this.state.editDescription) {
         return (
           <>
-            {this.props.listingState.fetchedListing.description.length > 255 ?
-              <Spoiler maxHeight={70} showLabel='View more' hideLabel='View less'>
-                <Text mt={-40} style={{paddingTop: '55px'}} className="description" onClick={() => this.setEdit('description')}>{this.props.listingState.fetchedListing.description}
-                <br/>
-                {this.renderPrice()}
-                </Text>
-              </Spoiler> :
-              <Text mt={-40} style={{paddingTop: '55px'}} className="description" onClick={() => this.setEdit('description')}>{this.props.listingState.fetchedListing.description}
-              <br/>
-              {this.renderPrice()}
+          {this.props.listingState.fetchedListing.description.length > 255 ?
+            <Spoiler mt={-30} sx={{color: '#05386b'}} maxHeight={120} showLabel='View more' hideLabel='View less'>
+              <Text mt={-40} style={{paddingTop: '55px', cursor: 'pointer'}} className="description" onClick={() => this.setEdit('description')}>{this.props.listingState.fetchedListing.description}
               </Text>
-            }
-          </>
+            </Spoiler> :
+            <Text mt={-40} style={{paddingTop: '55px', cursor: 'pointer'}} className="description" onClick={() => this.setEdit('description')}>{this.props.listingState.fetchedListing.description}
+            <br/>
+            {this.renderPrice()}
+            </Text>
+          }
+        </>
         )
         
       } else {
         return(
           <Group mt='xl' direction="column" position="center">
             <Textarea name='description' placeholder={this.props.listingState.fetchedListing.description} radius='md' invalid={this.props.listingState.descriptionErr ? true : false} required value={this.props.listingState.fetchedListing.description} onChange={this.props.handleChange} />
-            <NumberInput name='price' placeholder={this.props.listingState.fetchedListing.price.toString()} radius='md' invalid={this.props.listingState.priceErr ? true : false} required hideControls value={this.props.listingState.fetchedListing.price} onChange={this.props.handleNumber} />
+            <NumberInput name='price' placeholder={this.props.listingState.priceStr} radius='md' invalid={this.props.listingState.priceErr ? true : false} required hideControls value={this.props.listingState.fetchedListing.price} onChange={this.props.handleNumber} />
           </Group>
         )
       }
@@ -131,9 +129,14 @@ export default class ListingEdit extends React.Component<EditProps, EditState> {
     renderPrice = () => {
       if (!this.state.editPrice) {
         return (
-          <Center>
-            <Badge mt={20} radius='lg' size="xl" onClick={() => this.setEdit('price')}>${this.props.listingState.fetchedListing.price} USD</Badge>
-          </Center>
+          <>
+          {this.props.listingState.fetchedListing.description.length > 255 ?
+            <Badge sx={{cursor: 'pointer'}} color='secondary' mt={5} mb={5} radius='lg' size="xl" onClick={() => this.setEdit('price')}>${this.props.listingState.fetchedListing.price} USD</Badge> :
+            <Center>
+              <Badge sx={{cursor: 'pointer'}} mt={20} radius='lg' size="xl" onClick={() => this.setEdit('price')}>${this.props.listingState.fetchedListing.price} USD</Badge>
+            </Center>
+          }
+          </>
         )
       }
     }
@@ -343,6 +346,7 @@ updateListingInfo = async ():Promise<void> => {
     this.setState({
       _isMounted: true,
     })
+    this.props.app.setEndpointID(this.state.listingID);
   }
 
   componentDidUpdate(prevProps:Readonly<EditProps>, prevState:Readonly<EditState>) {
@@ -375,6 +379,11 @@ updateListingInfo = async ():Promise<void> => {
         <Center>
           {this.renderDescription()}
         </Center>
+        {(this.props.listingState.fetchedListing.description.length > 255 && this.state.inputVisible === false) &&
+        <Center>
+          {this.renderPrice()}
+        </Center>
+        }
         {this.state.inputVisible &&
           <Group mt='sm' position="center">
             <Button onClick={this.handleUpdate} className="formButton" size="sm" radius='md' compact loading={this.state.submitted && this.state.responseCode !== 201 ? true : false} >Save Changes</Button>
@@ -382,7 +391,7 @@ updateListingInfo = async ():Promise<void> => {
           </Group>
         }
         <Group mt='lg' position="center">
-          <Button className="formButton" size="lg" radius='md' compact onClick={() => console.log('delete')}>Delete</Button>
+          <Button className="formButton" size="lg" radius='md' compact onClick={() => this.props.app.setDlt(true)}>Delete</Button>
         </Group>
         {this.state.responseCode === 500 ?
           <Alert icon={<BsEmojiFrown/>} title='Sorry' color='red' radius='md' withCloseButton onClose={() => this.setState({responseCode: 0})}>Internal Error</Alert> :

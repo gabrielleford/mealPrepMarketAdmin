@@ -32,6 +32,7 @@ export type ListingState = {
       lastName: string,
     },
   },
+  priceStr: string,
   titleErr: boolean,
   descriptionErr: boolean,
   priceErr: boolean,
@@ -57,6 +58,7 @@ class ListingById extends React.Component<ListingProps, ListingState> {
           lastName: '',
         },
       },
+      priceStr: '',
       titleErr: false,
       descriptionErr: false,
       priceErr: false,
@@ -79,7 +81,11 @@ class ListingById extends React.Component<ListingProps, ListingState> {
       this.state._isMounted && this.setState({
         fetchedListing: res
       })
-      // this.state._isMounted && this.props.setWhat('listing');
+    })
+    .then(() => {
+      this.setState({
+        priceStr: this.state.fetchedListing.price.toString()
+      })
     })
     .catch(error => console.log(error))
   }
@@ -148,6 +154,8 @@ class ListingById extends React.Component<ListingProps, ListingState> {
       _isMounted: true
     })
     this.fetchListing();
+    this.props.setResponse(0);
+    this.props.setDlt(false);
   }
 
   componentWillUnmount() {

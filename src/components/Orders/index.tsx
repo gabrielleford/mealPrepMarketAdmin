@@ -99,6 +99,15 @@ export default class Orders extends React.Component<OrderProps, OrderState> {
     this.fetchOrders();
   }
 
+  componentDidUpdate(prevProps:Readonly<OrderProps>, prevState:Readonly<OrderState>) {
+    if (this.props.response !== prevProps.response && this.props.response === 200) {
+      this.fetchOrders();
+      this.props.setDlt(false);
+      this.props.setEndpointID('');
+      this.props.setResponse(0);
+    }
+  }
+
   componentWillUnmount() {
     this.setState({
       _isMounted: false
