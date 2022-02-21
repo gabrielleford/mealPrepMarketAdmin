@@ -28,7 +28,6 @@ html {
   height: 100%;
 }
 
-/* TODO: Fix size of background */
 body {
   font-family: 'Open Sans', sans-serif!important;
   background: url('./assets/mealPrepMarketBackgroundDesktop.png') center center;
@@ -43,42 +42,7 @@ body {
   width: 100%;
 }
 
-/* * Footer * */
-#footerDiv {
-  position: relative;
-  max-width: 100%;
-  margin: 0 auto;
-  bottom: 0;
-}
-
-#footer {
-  position: relative;
-  left: calc(-50vw + 50%);
-  bottom: 0;
-  width: 100vw;
-  height: 75px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  margin-top: auto;
-  padding-top: 1rem;
-  padding-bottom: 1rem;
-  color: #edf5e1;
-  background: #05386b;
-  font-size: 1rem;
-  border-top: 3px solid #edf5e1;
-}
-
-#footer a {
-  color: #edf5e1;
-}
-
 /* * FORMS * */
-  /* .formContainer {
-    margin-bottom: 40%;
-    max-height: 50vh;
-  } */
-
 .form {
   font-family: 'Open Sans', sans-serif;
   background: #05386b;
@@ -111,10 +75,6 @@ body {
 }
 
 /* * Listing By ID * */
-/* #listingById {
-  margin-bottom: 8rem;
-} */
-
 .listingCard {
   background: #edf5e1;
 }

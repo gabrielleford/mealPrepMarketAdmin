@@ -112,7 +112,7 @@ export default class Login extends React.Component<LoginProps, LoginState> {
 
   render(): React.ReactNode {
     return (
-      <Container className='formContainer' size={600} padding='lg'>
+      <Container size={600} padding='lg'>
         <Banner>
           <BannerH1>Welcome to Meal Prep Market for Admins!</BannerH1>
         </Banner>
