@@ -95,6 +95,7 @@ export default class Orders extends React.Component<OrderProps, OrderState> {
     this.setState({
       _isMounted: true,
     })
+    this.props.setWhat('order');
     this.props.setActive('3');
     this.fetchOrders();
   }
