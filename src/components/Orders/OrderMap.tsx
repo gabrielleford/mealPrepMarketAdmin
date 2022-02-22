@@ -89,7 +89,7 @@ export default class OrderMap extends React.Component<MapProps, MapState> {
     this.setState({
       _isMounted: true
     })
-    this.props.app.setWhat('orders');
+    this.props.app.setWhat('order');
   }
 
   componentWillUnmount() {

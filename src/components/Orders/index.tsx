@@ -95,9 +95,12 @@ export default class Orders extends React.Component<OrderProps, OrderState> {
     this.setState({
       _isMounted: true,
     })
+    this.props.setResponse(0);
+    this.fetchOrders();
+    this.props.setDlt(false);
+    this.props.setEndpointID('');
     this.props.setWhat('order');
     this.props.setActive('3');
-    this.fetchOrders();
   }
 
   componentDidUpdate(prevProps:Readonly<OrderProps>, prevState:Readonly<OrderState>) {
@@ -116,6 +119,7 @@ export default class Orders extends React.Component<OrderProps, OrderState> {
   }
 
   render(): React.ReactNode {
+    console.log(this.state.orders);
     return (
       <Container mt={'60px'}>
         <OrderMap orders={this.state.orders} app={{...this.props}} />
