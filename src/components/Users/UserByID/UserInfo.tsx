@@ -85,9 +85,11 @@ export default class UserInfo extends React.Component<UserProps, UserState> {
       return res.json()
     })
     .then(res => {
+      console.log(res.id);
       this.state._isMounted && this.setState({
         fetchedUser: res
       })
+      this.props.setEndpointID(res.id)
     })
   }
 
@@ -110,7 +112,9 @@ export default class UserInfo extends React.Component<UserProps, UserState> {
     this.setState({
       _isMounted: true,
     });
+    this.props.setResponse(0);
     this.fetchUser();
+    this.props.setDlt(false);
     this.props.setWhat('user');
     this.props.setActive('empty')
   }

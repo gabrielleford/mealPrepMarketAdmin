@@ -155,6 +155,7 @@ class ListingById extends React.Component<ListingProps, ListingState> {
     })
     this.fetchListing();
     this.props.setResponse(0);
+    this.props.setWhat('listing');
     this.props.setDlt(false);
   }
 

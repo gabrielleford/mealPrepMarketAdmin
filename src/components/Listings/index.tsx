@@ -77,10 +77,11 @@ export default class Listings extends React.Component<ListingProps, ListingState
     this.setState({
       _isMounted: true,
     })
+    this.props.setResponse(0);
     this.fetchListings()
     this.props.setDlt(false);
+    this.props.setWhat('listing');
     this.props.setEndpointID('');
-    this.props.setResponse(0);
   }
 
   componentDidUpdate(prevProps:Readonly<ListingProps>, prevState:Readonly<ListingState>) {
