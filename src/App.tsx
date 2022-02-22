@@ -21,7 +21,7 @@ export type AppProps = {
   endpointID: string,
   prevPath: string,
   user: {
-    userId: string,
+    id: string,
     firstName: string,
     lastName: string,
     email: string,
@@ -39,7 +39,7 @@ export type AppProps = {
   setEndpointID: (endpointID: string) => void,
   setPrevPath: (prevPath: string) => void,
   setUser: (user: {
-    userId: string,
+    id: string,
     firstName: string,
     lastName: string,
     email: string,
@@ -57,14 +57,14 @@ function App() {
   const [endpointID, setEndPointID] = useState<string>('');
   const [response, setResponse] = useState<number>(0);
   const [user, setUser] = useState<{
-    userId: string,
+    id: string,
     firstName: string,
     lastName: string,
     email: string,
     profilePicture: string,
     profileDescription: string,
     role: string}>({
-      userId: '',
+      id: '',
       firstName: '', 
       lastName: '', 
       email: '', 
@@ -84,7 +84,7 @@ function App() {
     setDlt(false);
     setResponse(0);
     setUser({
-      userId: '',
+      id: '',
       firstName: '', 
       lastName: '', 
       email: '', 
@@ -98,7 +98,7 @@ function App() {
     setSessionToken(localStorage.getItem('Authorization')); 
 
       const fetchData = async ():Promise<void> => {
-        if (sessionToken !== '' && user.userId === '') {
+        if (sessionToken !== '' && user.id === '') {
           await fetch(`${APIURL}/user/checkToken`, {
             method: 'POST',
             headers: {
@@ -114,9 +114,9 @@ function App() {
           })
           .then(() => user)
           .catch(error => console.log(error))
-        } else if (user.userId !== '' && sessionToken === '') {
+        } else if (user.id !== '' && sessionToken === '') {
           setUser({
-            userId: '',
+            id: '',
             firstName: '', 
             lastName: '', 
             email: '', 
