@@ -85,6 +85,9 @@ export default class Users extends React.Component<UserProps, UserState> {
     this.setState({
       _isMounted: true,
     })
+    this.props.setResponse(0);
+    this.props.setDlt(false);
+    this.props.setEndpointID('');
   }
 
   componentDidUpdate(prevProps:Readonly<UserProps>, prevState:Readonly<UserState>) {
@@ -95,10 +98,10 @@ export default class Users extends React.Component<UserProps, UserState> {
       this.fetchUsers();
     }
     if (this.props.response !== prevProps.response && this.props.response === 200) {
+      this.props.setResponse(0);
       this.fetchUsers();
       this.props.setDlt(false);
       this.props.setEndpointID('');
-      this.props.setResponse(0);
     }
   }
 

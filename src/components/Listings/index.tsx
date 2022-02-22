@@ -86,10 +86,10 @@ export default class Listings extends React.Component<ListingProps, ListingState
 
   componentDidUpdate(prevProps:Readonly<ListingProps>, prevState:Readonly<ListingState>) {
     if (this.props.response !== prevProps.response && this.props.response === 200) {
+      this.props.setResponse(0);
       this.fetchListings();
       this.props.setDlt(false);
       this.props.setEndpointID('');
-      this.props.setResponse(0);
     }
   }
 
