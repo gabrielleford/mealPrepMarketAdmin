@@ -9,6 +9,7 @@ import { Avatar, Button, Center, Grid, Group, Input, Select, Text, Textarea } fr
 type EditProps = {
   app: UserProps
   fetchedUser: UserState['fetchedUser'],
+  setUser: UserInfo['setUser'],
   handleChange: UserInfo['handleChange'],
   changeRoleInfo: UserInfo['changeRoleInfo'],
   fetchUser: UserInfo['fetchUser'],
@@ -56,7 +57,6 @@ export default class UserEdit extends React.Component<EditProps, EditState> {
     this.renderDescription = this.renderDescription.bind(this);
     this.setEdit = this.setEdit.bind(this);
     this.cancelEdit = this.cancelEdit.bind(this);
-    this.changeRole = this.changeRole.bind(this);
     this.handleImage = this.handleImage.bind(this);
     this.previewImage = this.previewImage.bind(this);
     this.previewImgSrc = this.previewImgSrc.bind(this);
@@ -182,12 +182,12 @@ export default class UserEdit extends React.Component<EditProps, EditState> {
           <Grid.Col>
             <Group position="center" spacing='xs' direction="column">
               <Text mt='1rem'>User Role</Text>
-                <Select style={{width: '30%', margin: '0 auto'}} value={this.state.role} radius='md'
+                <Select style={{width: '30%', margin: '0 auto'}} value={this.props.fetchedUser.role} radius='md'
                 data={[
                   {value: 'admin', label:'Admin'},
                   {value: 'primary', label:'Meal Prepper'},
                   {value: 'secondary', label:'Consumer'},
-                  ]} onChange={this.changeRole} />
+                  ]} onChange={this.props.changeRoleInfo} />
             </Group>
           </Grid.Col>
         )
@@ -225,6 +225,7 @@ export default class UserEdit extends React.Component<EditProps, EditState> {
             editDescription: false,
             editEmail: false,
             editName: false,
+            editRole: false,
             inputVisible: false,
           })
       }
@@ -238,12 +239,6 @@ export default class UserEdit extends React.Component<EditProps, EditState> {
         editRole: false,
         inputVisible: false,
         file: '',
-      })
-    }
-
-    changeRole = (role: string) => {
-      this.setState({
-        role: role
       })
     }
 
@@ -323,17 +318,7 @@ updateUserProfilePic = async (encodedImg: string):Promise<void> => {
       })
     })
     .then(() => {
-      this.state._isMounted && this.setState({
-        file: '',
-        previewSrc: '',
-        stringPrvwSrc: '',
-        editDescription: false,
-        editName: false,
-        editEmail: false,
-        inputVisible: false,
-        responseCode: 0,
-      })
-      this.props.fetchUser()
+      this.getUpdatedUser();
     })
     .catch(error => console.log(error))
 }
@@ -362,20 +347,40 @@ updateUserInfo = async ():Promise<void> => {
     })
     return res.json()
   })
+  .then(() => {
+    this.getUpdatedUser();
+  })
+  .catch(error => console.log(error))
+}
+
+getUpdatedUser = async ():Promise<void> => {
+  await fetch(`${APIURL}/user/userInfo/${this.state.profileID}`, {
+    method: 'GET',
+    headers: new Headers({
+      'Content-Type': 'application/json',
+      authorization: `Bearer ${this.props.app.sessionToken}`
+    })
+  })
   .then(res => {
-    this.state._isMounted &&  this.setState({
+    console.log(res)
+    this.setState({
       file: '',
       previewSrc: '',
       stringPrvwSrc: '',
       editDescription: false,
       editName: false,
       editEmail: false,
+      editRole: false,
       inputVisible: false,
       responseCode: 0,
+
     })
+    return res.json()
   })
-  this.props.fetchUser()
-  .catch(error => console.log(error))
+  .then(res => {
+    this.props.setUser(res);
+    console.log(res)
+  });
 }
 
   componentDidMount() {
@@ -404,7 +409,7 @@ updateUserInfo = async ():Promise<void> => {
   renderComponent = () => {
     return (
       <Grid sx={{color: '#edf5e1', margin: 'auto'}}>
-      {this.props.fetchedUser.role === 'primary' && 
+      {this.props.fetchedUser.role !== 'secondary' && 
         <Grid.Col>
           {this.props.fetchedUser.profileDescription.length >= 100 ?
             <Group position="center" direction="column">
@@ -416,13 +421,6 @@ updateUserInfo = async ():Promise<void> => {
               {this.renderDescription()}
             </Group>
           }
-        </Grid.Col>
-      }
-      {(this.props.fetchedUser.role === 'admin' || this.props.fetchedUser.role === 'main admin') &&
-        <Grid.Col>
-          <Group position="center">
-            {this.renderAvatar()}
-          </Group>
         </Grid.Col>
       }
       {this.renderName()}

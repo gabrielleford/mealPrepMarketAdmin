@@ -73,6 +73,20 @@ export default class UserInfo extends React.Component<UserProps, UserState> {
     }))
   }
 
+  setUser = (user: {
+    id: string,
+    role: string,
+    firstName: string,
+    lastName: string,
+    email: string,
+    profilePicture: string,
+    profileDescription: string,
+  }) => {
+    this.setState({
+      fetchedUser: user
+    })
+  }
+
   fetchUser = async ():Promise<void> => {
     await fetch(`${APIURL}/admin/any/${this.state.profileID}`, {
       method: "GET",
@@ -85,7 +99,6 @@ export default class UserInfo extends React.Component<UserProps, UserState> {
       return res.json()
     })
     .then(res => {
-      console.log(res.id);
       this.state._isMounted && this.setState({
         fetchedUser: res
       })
@@ -97,7 +110,7 @@ export default class UserInfo extends React.Component<UserProps, UserState> {
     return (
     <Container id='userInfo'>
       <Card id='userCard' radius='lg' sx={{padding: '60px 0', width: '90%', margin: 'auto'}}>
-        <UserEdit fetchedUser={this.state.fetchedUser} handleChange={this.handleChange} changeRoleInfo={this.changeRoleInfo} app={{...this.props}} fetchUser={this.fetchUser}/>
+        <UserEdit fetchedUser={this.state.fetchedUser} handleChange={this.handleChange} changeRoleInfo={this.changeRoleInfo} setUser={this.setUser} app={{...this.props}} fetchUser={this.fetchUser}/>
       </Card>
       {
         !localStorage.getItem('Authorization') &&
