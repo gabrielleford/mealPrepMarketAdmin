@@ -168,11 +168,11 @@ export default class UserEdit extends React.Component<EditProps, EditState> {
           <Grid.Col>
             <Center>
               {(this.props.fetchedUser.role === 'admin' || this.props.fetchedUser.role === 'main admin') ?
-                <Text mt='1rem' onClick={() => this.setEdit('role')}>User Role: Admin</Text> :
+                <Text sx={{cursor: 'pointer'}} mt='1rem' onClick={() => this.setEdit('role')}>User Role: Admin</Text> :
               this.props.fetchedUser.role === 'primary' ?
-                <Text mt='1rem' onClick={() => this.setEdit('role')}>User Role: Meal Prepper</Text> :
+                <Text sx={{cursor: 'pointer'}} mt='1rem' onClick={() => this.setEdit('role')}>User Role: Meal Prepper</Text> :
               this.props.fetchedUser.role === 'primary' ? '' :
-                <Text mt='1rem' onClick={() => this.setEdit('role')}>User Role: Consumer</Text>
+                <Text sx={{cursor: 'pointer'}} mt='1rem' onClick={() => this.setEdit('role')}>User Role: Consumer</Text>
               }
             </Center>
           </Grid.Col>
